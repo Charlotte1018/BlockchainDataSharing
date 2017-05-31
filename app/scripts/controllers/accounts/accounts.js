@@ -26,6 +26,7 @@ angular.module("accounts", []).controller("accounts", function ($scope) {
         if (web3.personal.newAccount($scope.accountPassword)) {
             $scope.createAccountStatus = "create success";
             $scope.newAccountAddress = web3.eth.accounts[web3.eth.accounts.length - 1];
+            alert('Create Success!');
         } else {
             $scope.createAccountStatus = "create fail";
         }
@@ -48,6 +49,7 @@ angular.module("accounts", []).controller("accounts", function ($scope) {
      */
     $scope.chargeAccount = function () {
         web3.personal.unlockAccount($scope.selectedAccountFrom, $scope.unlockPassword);
+        // web3.personal.unlockAccount($scope.selectedAccountFrom,'1');
         $scope.msg = web3.eth.sendTransaction({
             from: $scope.selectedAccountFrom,
             to: $scope.selectedAccountTo,
