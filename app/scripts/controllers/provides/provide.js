@@ -1,7 +1,5 @@
-/**
- * Created by su on 2017/5/12.
- */
-angular.module("ctrlModule", []).controller("provide", function ($scope) {
+
+angular.module("provide", []).controller("provide", function ($scope) {
     //账户部分初始化
     //初始取出账户
     $scope.accounts = web3.eth.accounts;

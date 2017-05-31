@@ -1,4 +1,4 @@
-angular.module("ctrlModule", []).controller("request", function ($scope) {
+angular.module("request", []).controller("request", function ($scope) {
     //账户部分初始化
     //初始取出账户
     $scope.accounts = web3.eth.accounts;

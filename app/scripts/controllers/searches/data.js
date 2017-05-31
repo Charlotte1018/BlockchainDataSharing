@@ -1,5 +1,6 @@
 
-angular.module("ctrlModule", []).controller("data", function ($scope) {
+angular.module("data", [])
+.controller("data", function ($scope) {
     $scope.dataSets = [];
 
     //获取数据

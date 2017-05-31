@@ -33,51 +33,51 @@
           <i class="fa fa-user"></i><span>Accounts</span><span class="arrow"></span>
       </a>
       <ul class="sub">
-        <li><a href="#">Account List</a></li>
+        <li><a ui-sref="app.accountsList">Account List</a></li>
         <li><a ui-sref="app.creatAccount">Create Accounts</a></li>
-        <li><a href="#">Get Balance</a></li>
-        <li><a href="#">Charge Account</a></li>
+        <li><a ui-sref="app.getBalance">Get Balance</a></li>
+        <li><a ui-sref="app.chargeAccount">Charge Account</a></li>
       </ul>
     </li>
     <li class="sub-menu">
       <a>
-          <i class="icon-cogs"></i><span>Data Provider</span><span class="arrow"></span>
+          <i class="fa fa-database"></i><span>Data Provider</span><span class="arrow"></span>
       </a>
       <ul class="sub">
-        <li><a href="#">Provide Data</a></li>
-        <li><a href="#">Data List</a></li>
+        <li><a ui-sref="app.provideData">Provide Data</a></li>
+        <li><a ui-sref="app.provideDataList">Data List</a></li>
       </ul>
     </li>
     <li class="sub-menu">
       <a>
-          <i class="icon-tasks"></i><span>Data Requester</span><span class="arrow"></span>
+          <i class="fa fa-upload"></i><span>Data Requester</span><span class="arrow"></span>
       </a>
       <ul class="sub">
-        <li><a href="#">Requeste Data</a></li>
-        <li><a href="#">Data List</a></li>
+        <li><a ui-sref="app.requestData">Requeste Data</a></li>
+        <li><a ui-sref="app.requestDataList">Data List</a></li>
       </ul>
     </li>
     <li class="sub-menu">
-      <a><i class="icon-th"></i><span>Data Search</span><span class="arrow"></span>
+      <a><i class="fa fa-search"></i><span>Data Search</span><span class="arrow"></span>
       </a>
       <ul class="sub">
-        <li><a href="basic_table.html">Data List</a></li>
-        <li><a href="dynamic_table.html">Search Data</a></li>
+        <li><a ui-sref="app.data">Data List</a></li>
+        <li><a ui-sref="app.search">Search Data</a></li>
       </ul>
     </li>
     <li class="sub-menu">
-      <a><i class="icon-glass"></i><span>Data Managements</span><span class="arrow"></span>
+      <a><i class="fa fa-group"></i><span>Data Managements</span><span class="arrow"></span>
       </a>
       <ul class="sub">
-        <li><a href="blank.html">Blank Page</a></li>
-        <li><a href="profile.html">Profile</a></li>
-        <li><a href="invoice.html">Invoice</a></li>
-        <li><a href="404.html">404 Error</a></li>
-        <li><a href="500.html">500 Error</a></li>
+        <li><a ui-sref="app.personalDataList">Personal Data List</a></li>
+        <li><a ui-sref="app.personalDataControl">Provide Data control</a></li>
+        <!--<li><a ui-sref="app.requestDataList">Invoice</a></li>
+        <li><a ui-sref="app.requestDataList">404 Error</a></li>
+        <li><a ui-sref="app.requestDataList">500 Error</a></li>-->
       </ul>
     </li>
     <li>
-      <a href="login.html"><i class="icon-user"></i><span>Login Page</span>
+      <a ui-sref="app.login"><i class="icon-user"></i><span>Login Page</span>
       </a>
     </li>
   </ul>
