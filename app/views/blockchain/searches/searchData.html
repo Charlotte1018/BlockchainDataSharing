@@ -1,0 +1,58 @@
+<body>
+    <label>Search By Data Name</label>
+    <input ng-model="dataName">
+    <hr>
+    <table>
+        <thead>
+            <tr>
+                <td>Data Name</td>
+                <td>Type List</td>
+                <td>Introduction</td>
+                <td>Provider</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{data.dataName}}</td>
+                <td>
+                    <p ng-repeat="type in data.types">
+                        {{type.key}} : {{type.value}}
+                    </p>
+                </td>
+                <td>{{data.introduction}}</td>
+                <td>{{data.provider}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <button ng-click="searchDataByName()">Search Data By Name</button>
+    <hr>
+    <label>Search By Data Type</label>
+    <hr>
+    <label>Type Key</label>
+    <input ng-model="type_key">
+    <hr>
+    <label>Type Value</label>
+    <input ng-model="type_value">
+    <hr>
+    <table>
+        <thead>
+            <tr>
+                <td>Data Name</td>
+                <td>Type List</td>
+                <td>Introduction</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="dataSet in dataSets">
+                <td>{{dataSet.dataName}}</td>
+                <td>
+                    <p ng-repeat="type in dataSet.types">
+                        {{type.key}} : {{type.value}}
+                    </p>
+                </td>
+                <td>{{dataSet.introduction}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <button ng-click="searchDataByType()">Search Data By Type</button>
+</body>

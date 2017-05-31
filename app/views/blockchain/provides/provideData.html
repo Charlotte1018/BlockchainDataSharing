@@ -1,0 +1,22 @@
+<body>
+    Choose the provider:
+    <select ng-init="selectedAccount = accounts[0]" ng-model="selectedAccount" ng-options="account for account in accounts ">
+</select>
+    <hr/> DataName:
+    <input ng-model="dataName" ng-change="checkDataNameExist()">{{nameError}}
+    <hr/>
+    <div ng-repeat="type in types">
+        Type Key {{$index}}:
+        <input ng-model="type.key">
+        <hr/> Type Value {{$index}}:
+        <input ng-model="type.value">
+        <hr/>
+    </div>
+    <button ng-click="addType()">Add Type</button>
+    <button ng-click="removeType()">Remove Type</button>
+    <hr/> Introdcution:
+    <textarea ng-model="introduction"></textarea>
+    <hr/> Password: <input ng-model="password" type="password">
+    <hr/>
+    <button ng-click="provideData()">Provide Data</button>
+</body>

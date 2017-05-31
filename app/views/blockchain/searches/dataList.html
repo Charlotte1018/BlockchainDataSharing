@@ -1,0 +1,25 @@
+<body>
+    <table>
+        <thead>
+            <tr>
+                <td>Data Name</td>
+                <td>Type List</td>
+                <td>Introduction</td>
+                <td>Provider</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="dataSet in dataSets">
+                <td>{{dataSet.dataName}}</td>
+                <td>
+                    <p ng-repeat="type in dataSet.types">
+                        {{type.key}} : {{type.value}}
+                    </p>
+                </td>
+                <td>{{dataSet.introduction}}</td>
+                <td>{{dataSet.provider}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <button ng-click="getDatas()">getData</button>
+</body>

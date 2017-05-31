@@ -1,0 +1,93 @@
+<header class="header white-bg">
+  <a class="logo"><i class="fa fa-navicon"></i> &nbsp;Flat<span>lab</span></a>
+  <div class="top-nav ">
+    <ul class="nav pull-right top-menu">
+      <li>
+        <input type="text" class="form-control search" placeholder="&nbsp; &nbsp;&nbsp;&nbsp;Search">
+      </li>
+      <li class="dropdown">
+        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+          <img alt="" src="img/avatar1_small.jpg"><span class="username">Jhon Doue</span><b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu extended logout">
+          <div class="log-arrow-up"></div>
+          <li><a href="#"><i class=" icon-suitcase"></i>Profile</a></li>
+          <li><a href="#"><i class="icon-cog"></i> Settings</a></li>
+          <li><a href="#"><i class="icon-bell-alt"></i> Notification</a></li>
+          <li><a href="login.html"><i class="icon-key"></i> Log Out</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<aside id="sidebar" class="nav-collapse" toggle-menu>
+  <ul class="sidebar-menu">
+    <li class="active">
+      <a ui-sref="app.home">
+          <i class="fa fa-home"></i><span>Home</span>
+      </a>
+    </li>
+    <li class="sub-menu">
+      <a>
+          <i class="fa fa-user"></i><span>Accounts</span><span class="arrow"></span>
+      </a>
+      <ul class="sub">
+        <li><a href="#">Account List</a></li>
+        <li><a ui-sref="app.creatAccount">Create Accounts</a></li>
+        <li><a href="#">Get Balance</a></li>
+        <li><a href="#">Charge Account</a></li>
+      </ul>
+    </li>
+    <li class="sub-menu">
+      <a>
+          <i class="icon-cogs"></i><span>Data Provider</span><span class="arrow"></span>
+      </a>
+      <ul class="sub">
+        <li><a href="#">Provide Data</a></li>
+        <li><a href="#">Data List</a></li>
+      </ul>
+    </li>
+    <li class="sub-menu">
+      <a>
+          <i class="icon-tasks"></i><span>Data Requester</span><span class="arrow"></span>
+      </a>
+      <ul class="sub">
+        <li><a href="#">Requeste Data</a></li>
+        <li><a href="#">Data List</a></li>
+      </ul>
+    </li>
+    <li class="sub-menu">
+      <a><i class="icon-th"></i><span>Data Search</span><span class="arrow"></span>
+      </a>
+      <ul class="sub">
+        <li><a href="basic_table.html">Data List</a></li>
+        <li><a href="dynamic_table.html">Search Data</a></li>
+      </ul>
+    </li>
+    <li class="sub-menu">
+      <a><i class="icon-glass"></i><span>Data Managements</span><span class="arrow"></span>
+      </a>
+      <ul class="sub">
+        <li><a href="blank.html">Blank Page</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="invoice.html">Invoice</a></li>
+        <li><a href="404.html">404 Error</a></li>
+        <li><a href="500.html">500 Error</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="login.html"><i class="icon-user"></i><span>Login Page</span>
+      </a>
+    </li>
+  </ul>
+</aside>
+
+<section id="main-content">
+  <div class="wrapper">
+     <div ui-view='content'></div>
+  </div>
+  <footer class="text-center">
+    <p>©️ 2017 BJUT-SSE 北工大区块链小组</p>
+  </footer>
+</section>

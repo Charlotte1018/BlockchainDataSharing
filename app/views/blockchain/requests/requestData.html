@@ -1,0 +1,15 @@
+<body>
+    <div ng-show="accounts.length > 0">
+        <label>请求者账户：</label>
+        <select ng-init="selectedAccount = accounts[0]" ng-model="selectedAccount" ng-options="account for account in accounts ">
+    </select>
+    </div>
+    <div>
+        <label>数据名称：</label>
+        <input ng-model="dataName" ng-change="isDataExist()"> {{nameError}}
+    </div>
+    <label>Password：</label>
+    <input ng-model="password">
+    <hr/>
+    <button ng-click="requestData()" ng-disabled="requestDisabled">Request Data</button>
+</body>

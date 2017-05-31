@@ -1,0 +1,26 @@
+
+<bodyÍÍ>
+<div ng-show="accounts.length > 0">
+    <label>请求者账户：</label>
+    <select ng-init="selectedAccount = accounts[0]" ng-model="selectedAccount"
+            ng-options="account for account in accounts " ng-change="getRequestList()">
+    </select>
+</div>
+<table>
+    <thead>
+    <tr>
+        <td>Data Name</td>
+        <td>Provider</td>
+        <td>Status</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="dataSet in dataSets">
+        <td>{{dataSet.dataName}}</td>
+        <td>{{dataSet.provider}}</td>
+        <td>{{dataSet.status}}</td>
+    </tr>
+    </tbody>
+</table>
+<button ng-click="getRequestList()">刷新</button>
+</body>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Charge Account</title>
+</head>
+<body ng-app="app" ng-controller="accounts">
+<label>From : </label>
+<select ng-init="selectedAccountFrom = accounts[0]" ng-model="selectedAccountFrom"
+        ng-options="account for account in accounts ">
+</select>
+<label>To : </label>
+<select ng-init="selectedAccountTo = accounts[0]" ng-model="selectedAccountTo"
+        ng-options="account for account in accounts ">
+</select>
+<p>充值金额：</p>
+<input value="charge ether" ng-model="chargeEthers"><label>Ether</label>
+<p>密码：</p>
+<input value="unlock password" ng-model="unlockPassword" type="password">
+<button ng-click="chargeAccount()">Charge</button>
+<p>交易哈希：{{msg}}</p>
+</body>
+<script type="text/javascript" src="../../node_modules/angular/angular.js"></script>
+<script type="text/javascript" src="../../node_modules/bignumber.js/bignumber.min.js"></script>
+<script type="text/javascript" src="../../node_modules/web3/dist/web3-light.js"></script>
+<script src="../../js/index.js"></script>
+<script type="text/javascript" src="../../js/accounts/accounts.js"></script>
+</html>

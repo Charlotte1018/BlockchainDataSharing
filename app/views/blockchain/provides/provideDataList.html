@@ -1,0 +1,36 @@
+<body>
+    <div ng-show="accounts.length > 0">
+        <label>选择需要查询的提供者账户：</label>
+        <select ng-init="selectedAccount = accounts[0]" ng-model="selectedAccount" ng-options="account for account in accounts ">
+    </select>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <td>Data Name</td>
+                <td>Type List</td>
+                <td>Introduction</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="dataSet in dataSets">
+                <td>{{dataSet.dataName}}</td>
+                <td>
+                    <p ng-repeat="type in dataSet.types">
+                        {{type.key}} : {{type.value}}
+                    </p>
+                </td>
+                <td>{{dataSet.introduction}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <button ng-click="getProvideData()">getProvideData</button>
+</body>
+<script type="text/javascript" src="../../node_modules/angular/angular.js"></script>
+<script type="text/javascript" src="../../node_modules/bignumber.js/bignumber.min.js"></script>
+<script type="text/javascript" src="../../node_modules/web3/dist/web3-light.js"></script>
+<script src="../../js/index.js"></script>
+<script type="text/javascript" src="../../js/configs/config.js"></script>
+<script type="text/javascript" src="../../js/provides/provide.js"></script>
+
+</html>
