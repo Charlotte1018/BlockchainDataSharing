@@ -1,1 +1,30 @@
-<div>home</div>
+<body>
+    <section class="profile-nav alt green-border ">
+        <section class="wrapper ">
+            <div ng-show="accounts.length > 0">
+                <section class="panel col-lg-10 col-lg-offset-1">
+                    <header class="panel-heading">
+                        <h4>Init Contract Address</h4>
+                    </header><br>
+                    <div class="panel-body">
+                        <form class="form-horizontal" role="form">
+
+                            <div class="form-group">
+                                <label for="inputPassword1" class="col-lg-2 control-label">Contract Address</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" ng-model="contractAddress">
+                                </div>
+                            </div>
+
+                            <!--<div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-10">
+                            <button type="submit" class="btn btn-danger" ng-click="getBalance()">Get Balance</button>
+                        </div>
+                    </div>-->
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </section>
+</body>

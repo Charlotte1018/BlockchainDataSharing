@@ -1,6 +1,7 @@
 angular.module("accounts", []).controller("accounts", function ($scope) {
     //账户部分初始化
     //初始取出账户
+    
     $scope.accounts = web3.eth.accounts;
     //初始账户余额
     if ($scope.accounts != null && $scope.accounts.length > 0) {

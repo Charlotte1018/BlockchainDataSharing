@@ -21,4 +21,5 @@ angular.module('ctrlModule', [])
       'AngularJS',
       'Karma'
     ];
+    
   })

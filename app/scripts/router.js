@@ -7,6 +7,7 @@ angular.module('mainrouter', [
     'request',
     'searches',
     'login',
+    'config',
     'data'
 ])
     .config(function ($stateProvider) {
@@ -21,7 +22,7 @@ angular.module('mainrouter', [
                 views: {
                     "content": {
                         templateUrl: 'views/blockchain/home.html',
-                        controller: 'accounts'
+                        controller: 'config'
                     }
                 }
             })

@@ -402,12 +402,16 @@ angular
     'directiveModule'
   ])
   .config(function ($urlRouterProvider) {
-    $urlRouterProvider.when("/", "app");
-    $urlRouterProvider.otherwise('app');
+    $urlRouterProvider.when("/", "app/home");
+    $urlRouterProvider.otherwise('app/home');
   })
   .config(['$locationProvider', function ($locationProvider) {
     $locationProvider.html5Mode({
       enabled: false, // true隐藏# false显示#
       requireBase: false
     })
-  }])
+  }]);
+  angular.module('config',[])
+  .controller('config',function($scope){
+      $scope.contractAddress = contractAddress;
+  })
