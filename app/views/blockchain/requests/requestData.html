@@ -1,15 +1,48 @@
 <body>
-    <div ng-show="accounts.length > 0">
-        <label>请求者账户：</label>
-        <select ng-init="selectedAccount = accounts[0]" ng-model="selectedAccount" ng-options="account for account in accounts ">
-    </select>
-    </div>
-    <div>
-        <label>数据名称：</label>
-        <input ng-model="dataName" ng-change="isDataExist()"> {{nameError}}
-    </div>
-    <label>Password：</label>
-    <input ng-model="password">
-    <hr/>
-    <button ng-click="requestData()" ng-disabled="requestDisabled">Request Data</button>
+    <section class="profile-nav alt green-border ">
+        <section class="wrapper ">
+            <!-- page start-->
+            <div class="row col-lg-10 col-lg-offset-1">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            <h4>Request Data</h4>
+                        </header>
+                        <div class="panel-body">
+                            <form class="form-horizontal" id="default">
+                                <fieldset  class="step">
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Request:</label>
+                                        <div class="col-lg-10">
+                                            <select class="form-control" ng-init="selectedAccount = accounts[0]" ng-model="selectedAccount" ng-options="account for account in accounts">
+                                                </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Password</label>
+                                        <div class="col-lg-10">
+                                            <input class="form-control" placeholder="Password" ng-model="password" type="password">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Data Name</label>
+                                        <div class="col-lg-10">
+                                            <input type="text" class="form-control" placeholder="Data Name" ng-model="dataName" ng-change="isDataExist()">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <div class="col-lg-offset-2 col-lg-10">
+                                            <button type="submit" class="btn btn-success col-lg-2" ng-click="requestData()" ng-disabled="requestDisabled">Request Data</button>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <!-- page end-->
+        </section>
+    </section>
 </body>

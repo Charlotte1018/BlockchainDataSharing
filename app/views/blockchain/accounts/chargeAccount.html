@@ -1,15 +1,55 @@
 <body>
-        <label>From : </label>
-        <select ng-init="selectedAccountFrom = accounts[0]" ng-model="selectedAccountFrom" ng-options="account for account in accounts ">
-</select>
-        <label>To : </label>
-        <select ng-init="selectedAccountTo = accounts[0]" ng-model="selectedAccountTo" ng-options="account for account in accounts ">
-</select>
-        <p>充值金额：</p>
-        <input value="charge ether" ng-model="chargeEthers"><label>Ether</label>
-        <p>密码：</p>
-        <input value="unlock password" ng-model="unlockPassword" type="password">
-        <button ng-click="chargeAccount()">Charge</button>
-        <p>交易哈希：{{msg}}</p>
-        
+        <section class="profile-nav alt green-border ">
+                <section class="wrapper">
+                        <section class="panel col-lg-10 col-lg-offset-1">
+                                <header class="panel-heading">
+                                        <h4>Charge Account</h4>
+                                </header><br>
+                                <div class="panel-body">
+                                        <form class="form-horizontal" role="form">
+                                                <div class="form-group">
+                                                        <label class="col-lg-2 control-label">From:</label>
+                                                        <div class="col-lg-10">
+                                                                <select class="form-control" ng-init="selectedAccountFrom = accounts[0]" ng-model="selectedAccountFrom" ng-options="account for account in accounts ">
+                                                </select>
+                                                        </div>
+                                                </div>
+                                                <div class="form-group">
+                                                        <label class="col-lg-2 control-label">To:</label>
+                                                        <div class="col-lg-10">
+                                                                <select class="form-control " ng-init="selectedAccountTo = accounts[0]" ng-model="selectedAccountTo" ng-options="account for account in accounts ">
+                                                </select>
+                                                        </div>
+                                                </div>
+                                                <div class="form-group">
+                                                        <label for="inputPassword1" class="col-lg-2 control-label">Balance</label>
+                                                        <div class="col-lg-10">
+                                                                <div class="input-group m-bot15">
+                                                                        <input type="text" class="form-control" ng-model="chargeEthers">
+                                                                        <span class="input-group-addon">Ether</span>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                                <div class="form-group">
+                                                        <label for="inputPassword1" class="col-lg-2 control-label">Password</label>
+                                                        <div class="col-lg-10">
+                                                                <input type="password" class="form-control" id="inputPassword1" placeholder="Password" ng-model="unlockPassword">
+                                                        </div>
+                                                </div>
+                                                <div class="form-group">
+                                                        <div class="col-lg-offset-2 col-lg-10">
+                                                                <button type="submit" class="btn btn-danger" ng-click="chargeAccount()">Charge </button>
+                                                        </div>
+                                                </div>
+                                                <div class="form-group">
+                                                        <label for="inputPassword1" class="col-lg-2 control-label">Charge Hash</label>
+                                                        <div class="col-lg-10">
+                                                                <input class="form-control" id="inputPassword1" placeholder="Hash" ng-model="msg">
+                                                        </div>
+                                                </div>
+                                        </form>
+                                </div>
+                        </section>
+                </section>
+        </section>
 </body>

@@ -1,36 +1,64 @@
 <body>
-    <div ng-show="accounts.length > 0">
-        <label>选择需要查询的提供者账户：</label>
-        <select ng-init="selectedAccount = accounts[0]" ng-model="selectedAccount" ng-options="account for account in accounts ">
-    </select>
-    </div>
-    <table>
-        <thead>
-            <tr>
-                <td>Data Name</td>
-                <td>Type List</td>
-                <td>Introduction</td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="dataSet in dataSets">
-                <td>{{dataSet.dataName}}</td>
-                <td>
-                    <p ng-repeat="type in dataSet.types">
-                        {{type.key}} : {{type.value}}
-                    </p>
-                </td>
-                <td>{{dataSet.introduction}}</td>
-            </tr>
-        </tbody>
-    </table>
-    <button ng-click="getProvideData()">getProvideData</button>
-</body>
-<script type="text/javascript" src="../../node_modules/angular/angular.js"></script>
-<script type="text/javascript" src="../../node_modules/bignumber.js/bignumber.min.js"></script>
-<script type="text/javascript" src="../../node_modules/web3/dist/web3-light.js"></script>
-<script src="../../js/index.js"></script>
-<script type="text/javascript" src="../../js/configs/config.js"></script>
-<script type="text/javascript" src="../../js/provides/provide.js"></script>
+    <section class="profile-nav alt green-border ">
+        <section class="wrapper ">
+            <div ng-show="accounts.length > 0">
+                <section class="panel col-lg-10 col-lg-offset-1">
+                    <header class="panel-heading">
+                        <h4>Provider's Data List</h4>
+                    </header><br>
+                    <div class="panel-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="inputPassword1" class="col-lg-2 control-label">Select Provider</label>
+                                <div class="col-lg-10">
+                                    <select class="form-control m-bot15" ng-init="selectedAccount = accounts[0]" ng-model="selectedAccount" ng-options="account for account in accounts">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-offset-2 col-lg-10">
+                                    <button type="submit" class="btn btn-danger col-lg-2" ng-click="getProvideData()">Search</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+                <section class="panel col-lg-10 col-lg-offset-1" >
+                          <header class="panel-heading">
+                              Data List
+                          </header>
+                          <table class="table table-striped border-top">
+                          <thead>
+                          <tr>
+                              <th style="width:8px;"><input type="checkbox" class="group-checkable"  /></th>
+                              <th>Data Name</th>
+                              <th class="hidden-phone">Type List</th>
+                              <th class="hidden-phone">Introduction</th>
+                              <!--<th class="hidden-phone"></th>-->
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <tr class="odd gradeX" ng-repeat="dataSet in dataSets">
+                              <td><input type="checkbox" class="checkboxes" value="1" /></td>
+                              <td>{{dataSet.dataName}}</td>
+                              <td class="hidden-phone"><p ng-repeat="type in dataSet.types">{{type.key}} : {{type.value}}</p></td>
+                              <td class="hidden-phone">{{dataSet.introduction}}</td>
+                              </tr>
+                              </tbody>
+                          </table>
+                          <header class="panel-heading"></header>
+                      </section>
 
-</html>
+
+
+
+
+
+
+
+
+
+            </div>
+        </section>
+    </section>
+</body>

@@ -1,26 +1,65 @@
 
 <body>
-<div ng-show="accounts.length > 0">
-    <label>请求者账户：</label>
-    <select ng-init="selectedAccount = accounts[0]" ng-model="selectedAccount"
-            ng-options="account for account in accounts " ng-change="getRequestList()">
-    </select>
-</div>
-<table>
-    <thead>
-    <tr>
-        <td>Data Name</td>
-        <td>Provider</td>
-        <td>Status</td>
-    </tr>
-    </thead>
-    <tbody>
-    <tr ng-repeat="dataSet in dataSets">
-        <td>{{dataSet.dataName}}</td>
-        <td>{{dataSet.provider}}</td>
-        <td>{{dataSet.status}}</td>
-    </tr>
-    </tbody>
-</table>
-<button ng-click="getRequestList()">刷新</button>
+<section class="profile-nav alt green-border ">
+        <section class="wrapper ">
+            <div ng-show="accounts.length > 0">
+                <section class="panel col-lg-10 col-lg-offset-1">
+                    <header class="panel-heading">
+                        <h4>Request's Data List</h4>
+                    </header><br>
+                    <div class="panel-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label for="inputPassword1" class="col-lg-2 control-label">Select Request</label>
+                                <div class="col-lg-10">
+                                    <select class="form-control m-bot15" ng-init="selectedAccount = accounts[0]"  ng-model="selectedAccount" ng-options="account for account in accounts">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-offset-2 col-lg-10">
+                                    <button type="submit" class="btn btn-danger col-lg-2" ng-click="getRequestList()">Request Data</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+                <section class="panel col-lg-10 col-lg-offset-1" >
+                          <header class="panel-heading">
+                              Data List
+                          </header>
+                          <table class="table table-striped border-top">
+                          <thead>
+                          <tr>
+                              <th style="width:8px;"><input type="checkbox" class="group-checkable"  /></th>
+                              <th>Data Name</th>
+                              <th class="hidden-phone">Provider</th>
+                              <th class="hidden-phone">Status</th>
+                              <!--<th class="hidden-phone"></th>-->
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <tr class="odd gradeX" ng-repeat="dataSet in dataSets">
+                              <td><input type="checkbox" class="checkboxes" value="1" /></td>
+                              <td>{{dataSet.dataName}}</td>
+                              <td class="hidden-phone">dataSet.provider</td>
+                              <td class="hidden-phone">{{dataSet.status}}</td>
+                              </tr>
+                              </tbody>
+                          </table>
+                          <header class="panel-heading"></header>
+                      </section>
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </section>
+    </section>
 </body>

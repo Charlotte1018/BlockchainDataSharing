@@ -33,7 +33,7 @@ web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
  * confirmData(bytes32 dataName, address requester) —— 根据地址和数据名称，确认数据请求
  *
  */
-var contractAddress = "0x164ba96BA1ead8714b9cFEB89784ee5C8340d2d0";
+var contractAddress = "0xC6A4F04d4060DB82Fbc3B7974AF5AD03C04679b2";
 var abi = [{
     "constant": false,
     "inputs": [{"name": "adr", "type": "address"}],
