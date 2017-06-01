@@ -1,10 +1,9 @@
 'use strict';
 var Web3 = require('web3');
 var web3 = new Web3();
-web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
-/**
- * Created by su on 2017/5/14.
- */
+var http="http://10.18.25.15:8545";
+web3.setProvider(new web3.providers.HttpProvider(http));
+
 /**
  * 管理合约
  * 功能：负责对数据和权限总体的控制
@@ -414,4 +413,8 @@ angular
   angular.module('config',[])
   .controller('config',function($scope){
       $scope.contractAddress = contractAddress;
+    //   $scope.Web3 = require('web3');
+    //   $scope.web3 = new Web3();
+    //   $scope.web3.setProvider(new web3.providers.HttpProvider($scope.httpAddress));
+      $scope.httpAddress=http;
   })
