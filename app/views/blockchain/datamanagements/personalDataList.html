@@ -9,10 +9,10 @@
                     <div class="panel-body">
                         <form class="form-horizontal" role="form">
                             <div class="form-group">
-                                <label for="inputPassword1" class="col-lg-2 control-label">Select Account</label>
+                                <label class="col-lg-2 control-label">Select Account</label>
                                 <div class="col-lg-10">
-                                    <select class="form-control m-bot15" ng-init="selectedAccount = accounts[0]" ng-model="selectedAccount" ng-options="account for account in accounts"
-                                        ng-change="getPersonalDataList()">
+                                    <select class="form-control m-bot15"  ng-model="selectedAccount" ng-options="account.userName as account.userName for account in accounts"
+                                        ng-change="getPersonalTaskList()">
                                     </select>
                                 </div>
                             </div>
@@ -26,27 +26,27 @@
                 </section>
                 <section class="panel col-lg-10 col-lg-offset-1">
                     <header class="panel-heading">
-                        Provide Data List
+                        Provide Task List
                     </header>
-                    <header class="panel-heading"> You have provided {{provideSum}} data.</header>
+                    <header class="panel-heading"> You have provided {{provideSum}} Task.</header>
                     <table class="table table-striped border-top">
                         <thead>
                             <tr>
                                 <th style="width:8px;"><input type="checkbox" class="group-checkable" /></th>
-                                <th>Data Name</th>
+                                <th>Task Name</th>
                                 <th class="hidden-phone">Type List</th>
                                 <th class="hidden-phone">Requester Number</th>
                                 <!--<th class="hidden-phone"></th>-->
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="odd gradeX" ng-repeat="data in provideDataSet">
+                            <tr class="odd gradeX" ng-repeat="task in provideTaskSet">
                                 <td><input type="checkbox" class="checkboxes" value="1" /></td>
-                                <td>{{data.dataName}}</td>
+                                <td>{{task.taskName}}</td>
                                 <td class="hidden-phone">
-                                    <p ng-repeat="type in data.types">{{type.key}} : {{type.value}}</p>
+                                    <p ng-repeat="type in task.types">{{type.key}} : {{type.value}}</p>
                                 </td>
-                                <td class="hidden-phone">{{data.requestNum}}</td>
+                                <td class="hidden-phone">{{task.requestNum}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -54,25 +54,26 @@
                 </section>
                 <section class="panel col-lg-10 col-lg-offset-1">
                     <header class="panel-heading">
-                        Request Data List
+                        Request Task List
                     </header>
-                    <header class="panel-heading"> You have requested {{requestSum}} data.</header>
+                    <header class="panel-heading"> You have requested {{requestSum}} task.</header>
                     <table class="table table-striped border-top">
                         <thead>
                             <tr>
                                 <th style="width:8px;"><input type="checkbox" class="group-checkable" /></th>
-                                <th>Data Name</th>
+                                <th>Task Name</th>
                                 <th class="hidden-phone">Provider</th>
-                                <th class="hidden-phone">Request Status</th>
-                                <!--<th class="hidden-phone"></th>-->
+                              <th class="hidden-phone">Information</th>
+                              <th class="hidden-phone">Request Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="odd gradeX" ng-repeat="data in requestDataSet">
+                            <tr class="odd gradeX" ng-repeat="task in requestTaskSet">
                                 <td><input type="checkbox" class="checkboxes" value="1" /></td>
-                                <td>{{data.dataName}}</td>
-                                <td class="hidden-phone">{{data.provider}}</td>
-                                <td class="hidden-phone">{{data.status}}</td>
+                                <td>{{task.taskName}}</td>
+                                <td class="hidden-phone">{{task.provider}}</td>
+                                <td class="hidden-phone">{{task.information}}</td>
+                                <td class="hidden-phone">{{task.status}}</td>
                             </tr>
                         </tbody>
                     </table>

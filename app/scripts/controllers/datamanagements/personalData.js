@@ -4,11 +4,18 @@
 angular.module("ctrlModule", []).controller("personalData", function ($scope) {
     //账户部分初始化
     //初始取出账户
-    $scope.accounts = web3.eth.accounts;
+    $scope.accounts = getRegisterAccounts();
     $scope.dataSets = [];
     $scope.provideSum = 0;
     $scope.requestSum = 0;
-
+    /**
+     * 页面加载完后自动显示第一个用户名
+     */
+    $scope.$watch('$viewContentLoaded', function () {
+        if ($scope.accounts.length > 0) {
+            $scope.selectedAccount = $scope.accounts[0].userName;
+        }
+    });
     /**
      * 获取提供数据列表
      */

@@ -11,7 +11,7 @@
                             <div class="form-group">
                                 <label for="inputPassword1" class="col-lg-2 control-label">Select</label>
                                 <div class="col-lg-10">
-                                    <select class="form-control m-bot15" ng-init="selectedAccount = accounts[0]" ng-model="selectedAccount" ng-options="account for account in accounts "
+                                    <select class="form-control m-bot15"  ng-model="selectedAccount" ng-options="account.userName as account.userName for account in registerAccounts "
                                         ng-change="getBalance()">
                         </select>
                                 </div>

@@ -62,6 +62,24 @@ angular.module('mainrouter', [
                     }
                 }
             })
+            .state('app.registerAccounts', {
+                url: '/getBalance',
+                views: {
+                    "content": {
+                        templateUrl: 'views/blockchain/accounts/registerAccounts.html',
+                        controller: 'accounts'
+                    }
+                }
+            })
+            .state('app.registerAccountsList', {
+                url: '/getBalance',
+                views: {
+                    "content": {
+                        templateUrl: 'views/blockchain/accounts/registerAccountsList.html',
+                        controller: 'accounts'
+                    }
+                }
+            })
             .state('app.personalDataList', {
                 url: '/personalDataList',
                 views: {

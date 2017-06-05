@@ -9,7 +9,7 @@
                     <h4>Please Input Password of the Account </h4><br><br>
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
-                            <label for="inputPassword1" class="col-lg-2 control-label">Password</label>
+                            <label class="col-lg-2 control-label">Password</label>
                             <div class="col-lg-10">
                                 <input type="password" class="form-control" id="inputPassword1" placeholder="Password" ng-model="accountPassword">
                             </div>
@@ -20,53 +20,18 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-lg-offset-2 col-lg-10">
-                                <div class="">
-                                    <h5 class="col-lg-10 form-control">{{createAccountStatus}}</h5>
-                                    <h5 class="col-lg-10 form-control">{{newAccountAddress}}</h5>
-                                </div>
+                            <label class="col-lg-2 control-label">Status</label>
+                            <div class="col-lg-10">
+                                <h5 class="col-lg-10 form-control">{{createAccountStatus}}</h5>
                             </div>
                         </div>
-
+                        <div class="form-group form-horizontal">
+                            <label class="col-lg-2 control-label">Hash</label>
+                            <div class="col-lg-10">
+                                <h5 class="col-lg-10 form-control">{{newAccountAddress}}</h5>
+                            </div>
+                        </div>
                     </form>
-                </div>
-            </section>
-            <section class="panel col-lg-10 col-lg-offset-1">
-                <div class="panel-body">
-                    <a href="#myModal-1" data-toggle="modal" class="btn btn-xs btn-warning">Form in Modal 2</a>
-                    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal-1" class="modal fade">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
-                                    <h4 class="modal-title">Create Success</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="form-group">
-                                            <label for="inputEmail1" class="col-lg-2 control-label">Email</label>
-                                            <div class="col-lg-10">
-                                                <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="inputPassword1" class="col-lg-2 control-label">Password</label>
-                                            <div class="col-lg-10">
-                                                <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-lg-offset-2 col-lg-10">
-                                                <div class="checkbox">
-                                                    <label><input type="checkbox"> Remember me</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
         </section>
