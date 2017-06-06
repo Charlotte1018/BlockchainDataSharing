@@ -1,11 +1,10 @@
 
-angular.module("provideTask", []).controller("provideTask", function ($scope) {
+angular.module("provide", []).controller("provide", function ($scope) {
   //账户部分初始化
-  //初始取出已注册的账户
+  //初始取出账户
   $scope.accounts = getRegisterAccounts();
   $scope.types = [{key: "", value: ""}];
-  $scope.taskSets = [];
-  $scope.nameError = "";
+  $scope.dataSets = [];
   /**
    * 页面加载完后自动显示第一个用户名
    */
@@ -14,13 +13,15 @@ angular.module("provideTask", []).controller("provideTask", function ($scope) {
       $scope.selectedAccount = $scope.accounts[0].userName;
     }
   });
-
   /**
    * 创建数据
    */
-  $scope.provideTask = function () {
+  /**
+   * 创建数据
+   */
+  $scope.provideData = function () {
     //检查是否都有值
-    if (!$scope.taskName) {
+    if (!$scope.dataName) {
       alert("The data name must be filled!");
       return;
     }
@@ -39,8 +40,8 @@ angular.module("provideTask", []).controller("provideTask", function ($scope) {
       return;
     }
     //检查数据名称是否存在
-    if (contractInstance.isTaskNameExist.call($scope.taskName)) {
-      alert("The task name exist");
+    if (contractInstance.isDataNameExist.call($scope.dataName)) {
+      alert("The data name exist");
       return;
     }
     //解锁账户
@@ -48,13 +49,13 @@ angular.module("provideTask", []).controller("provideTask", function ($scope) {
     //添加数据
     try {
       //添加数据源
-      contractInstance.createTask($scope.taskName, $scope.introduction, {
+      contractInstance.createData($scope.dataName, $scope.introduction, {
         from: getUserAddressByName($scope.selectedAccount),
         gas: 80000000
       });
       //添加数据类型
       for (var i = 0; i < $scope.types.length; i++) {
-        contractInstance.addTypeToTask($scope.types[i].key, $scope.types[i].value, $scope.taskName, {
+        contractInstance.addTypeToData($scope.types[i].key, $scope.types[i].value, $scope.dataName, {
           from: getUserAddressByName($scope.selectedAccount),
           gas: 80000000
         });
@@ -85,11 +86,11 @@ angular.module("provideTask", []).controller("provideTask", function ($scope) {
    * 检查数据名称是否存在
    */
   $scope.checkDataNameExist = function () {
-    if (contractInstance.isTaskNameExist.call($scope.taskName)) {
+    if (contractInstance.isDataNameExist.call($scope.dataName)) {
       $scope.nameError = "The name is exist";
     }
     else {
-      if (!$scope.taskName) {
+      if (!$scope.dataName) {
         $scope.nameError = "Please input data name.";
       }
       else $scope.nameError = "";
@@ -99,33 +100,34 @@ angular.module("provideTask", []).controller("provideTask", function ($scope) {
   /**
    * 查询对应账户所提供的数据列表
    */
-  $scope.getProvideTask = function () {
-    $scope.taskSets = [];
-    var address = getUserAddressByName($scope.selectedAccount);
+  $scope.getProvideData = function () {
+    $scope.dataSets = [];
     //获取提供者提供的数据总数
-    var provideNum = contractInstance.getTaskNumByProvider.call(address).toNumber();
+    var provideNum = contractInstance.getDataNumByProvider.call(getUserAddressByName($scope.selectedAccount)).toNumber();
     //逐个获取数据对象
     for (var i = 0; i < provideNum; i++) {
-      var taskSet = [];
-      taskSet.taskName = web3.toAscii(contractInstance.getProvideTaskNameByIndex.call(address, i));
+      var dataSet = [];
+      dataSet.dataName = web3.toAscii(contractInstance.getProvideDataNameByIndex.call(getUserAddressByName($scope.selectedAccount), i));
       //根据数据名称获取数据对象合约
-      var taskObjectInstance = taskContract.at(contractInstance.getTaskAddressByTaskName.call(taskSet.taskName));
+      var dataObjectInstance = dataContract.at(contractInstance.getDataAddressByDataName.call(dataSet.dataName));
       //获取对象介绍
-      taskSet.introduction = taskObjectInstance.introduction();
-      //获取对象状态
-      taskSet.status = taskStatus[taskObjectInstance.taskStatus()];
+      dataSet.introduction = dataObjectInstance.introduction();
       //获取对象类型
-      taskSet.types = [];
-      for (var j = 0; j < taskObjectInstance.typeNum().toNumber(); j++) {
+      dataSet.types = [];
+      for (var j = 0; j < dataObjectInstance.typeNum().toNumber(); j++) {
         //循环添加类型
         var type = [];
-        type.key = web3.toAscii(taskObjectInstance.dataTypes(j)[0]);
-        type.value = web3.toAscii(taskObjectInstance.dataTypes(j)[1]);
-        taskSet.types.push(type);
+        type.key = web3.toAscii(dataObjectInstance.dataTypes(j)[0]);
+        type.value = web3.toAscii(dataObjectInstance.dataTypes(j)[1]);
+        dataSet.types.push(type);
       }
-      $scope.taskSets.push(taskSet);
+      $scope.dataSets.push(dataSet);
     }
     //设置默认名称
-    if (provideNum > 0) $scope.selectedTask = $scope.taskSets[0].taskName;
+    if (provideNum > 0) $scope.selectedData = $scope.dataSets[0].dataName;
+  };
+
+  $scope.getDataRequestList = function () {
+
   };
 });

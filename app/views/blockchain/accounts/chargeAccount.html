@@ -10,14 +10,14 @@
                                                 <div class="form-group">
                                                         <label class="col-lg-2 control-label">From:</label>
                                                         <div class="col-lg-10">
-                                                                <select class="form-control"  ng-model="selectedAccountFrom" ng-options="account.userName as account.userName for account in registerAccounts ">
+                                                                <select class="form-control" ng-init="selectedAccountFrom = accounts[0]" ng-model="selectedAccountFrom" ng-options="account for account in accounts ">
                                                 </select>
                                                         </div>
                                                 </div>
                                                 <div class="form-group">
                                                         <label class="col-lg-2 control-label">To:</label>
                                                         <div class="col-lg-10">
-                                                                <select class="form-control " ng-model="selectedAccountTo" ng-options="account.userName as account.userName for account in registerAccounts ">
+                                                                <select class="form-control " ng-init="selectedAccountTo = accounts[0]" ng-model="selectedAccountTo" ng-options="account for account in accounts">
                                                 </select>
                                                         </div>
                                                 </div>
@@ -33,7 +33,7 @@
                                                 <div class="form-group">
                                                         <label for="inputPassword1" class="col-lg-2 control-label">Password</label>
                                                         <div class="col-lg-10">
-                                                                <input type="password" class="form-control" id="inputPassword1" placeholder="Password" ng-model="unlockPassword">
+                                                                <input type="password" class="form-control"  placeholder="Password" ng-model="unlockPassword">
                                                         </div>
                                                 </div>
                                                 <div class="form-group">

@@ -62,8 +62,8 @@ angular.module("accounts", []).controller("accounts", function ($scope) {
      * return msg-交易哈希
      */
     $scope.chargeAccount = function () {
-        $scope.selectedAccountFrom = getUserAddressByName($scope.selectedAccountFrom);
-        $scope.selectedAccountTo = getUserAddressByName($scope.selectedAccountTo);
+        $scope.selectedAccountFrom = $scope.accounts[0];
+        $scope.selectedAccountTo = $scope.accounts[0];
         console.log('from'+$scope.selectedAccountFrom);
         console.log('to'+$scope.selectedAccountTo);
         web3.personal.unlockAccount($scope.selectedAccountFrom, $scope.unlockPassword);

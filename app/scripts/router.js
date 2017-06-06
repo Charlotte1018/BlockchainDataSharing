@@ -3,11 +3,16 @@ angular.module('mainrouter', [
     'ctrlModule',
     'accounts',
     'datamanagements',
+    'datamanagementstask',
     'provide',
+    'provideTask',
     'request',
+    'requestTask',
     'searches',
+    'searchTask',
     'login',
     'config',
+    'task',
     'data'
 ])
     .config(function ($stateProvider) {
@@ -63,7 +68,7 @@ angular.module('mainrouter', [
                 }
             })
             .state('app.registerAccounts', {
-                url: '/getBalance',
+                url: '/registerAccounts',
                 views: {
                     "content": {
                         templateUrl: 'views/blockchain/accounts/registerAccounts.html',
@@ -72,7 +77,7 @@ angular.module('mainrouter', [
                 }
             })
             .state('app.registerAccountsList', {
-                url: '/getBalance',
+                url: '/registerAccountsList',
                 views: {
                     "content": {
                         templateUrl: 'views/blockchain/accounts/registerAccountsList.html',
@@ -89,6 +94,15 @@ angular.module('mainrouter', [
                     }
                 }
             })
+          .state('app.personalTaskList', {
+            url: '/personalTaskList',
+            views: {
+              "content": {
+                templateUrl: 'views/blockchain/datamanagements/personalTaskList.html',
+                controller: 'personalTask'
+              }
+            }
+          })
             .state('app.personalDataControl', {
                 url: '/personalDataControl',
                 views: {
@@ -98,6 +112,15 @@ angular.module('mainrouter', [
                     }
                 }
             })
+          .state('app.personalTaskControl', {
+            url: '/personalTaskControl',
+            views: {
+              "content": {
+                templateUrl: 'views/blockchain/datamanagements/provideTaskControl.html',
+                controller: 'provideCtrlTask'
+              }
+            }
+          })
             .state('app.provideData', {
                 url: '/provideData',
                 views: {
@@ -107,6 +130,15 @@ angular.module('mainrouter', [
                     }
                 }
             })
+          .state('app.provideTask', {
+            url: '/provideTask',
+            views: {
+              "content": {
+                templateUrl: 'views/blockchain/provides/provideTask.html',
+                controller: 'provideTask'
+              }
+            }
+          })
 
             .state('app.provideDataList', {
                 url: '/provideDataList',
@@ -117,6 +149,15 @@ angular.module('mainrouter', [
                     }
                 }
             })
+          .state('app.provideTaskList', {
+            url: '/provideTaskList',
+            views: {
+              "content": {
+                templateUrl: 'views/blockchain/provides/provideTaskList.html',
+                controller: 'provideTask'
+              }
+            }
+          })
             .state('app.requestData', {
                 url: '/requestData',
                 views: {
@@ -126,6 +167,15 @@ angular.module('mainrouter', [
                     }
                 }
             })
+          .state('app.requestTask', {
+            url: '/requestTask',
+            views: {
+              "content": {
+                templateUrl: 'views/blockchain/requests/requestTask.html',
+                controller: 'requestTask'
+              }
+            }
+          })
             .state('app.requestDataList', {
                 url: '/requestDataList',
                 views: {
@@ -135,8 +185,17 @@ angular.module('mainrouter', [
                     }
                 }
             })
-            .state('app.search', {
-                url: '/search',
+          .state('app.requestTaskList', {
+            url: '/requestTaskList',
+            views: {
+              "content": {
+                templateUrl: 'views/blockchain/requests/requestTaskList.html',
+                controller: 'requestTask'
+              }
+            }
+          })
+            .state('app.searchData', {
+                url: '/searchData',
                 views: {
                     "content": {
                         templateUrl: 'views/blockchain/searches/searchData.html',
@@ -144,7 +203,16 @@ angular.module('mainrouter', [
                     }
                 }
             })
-            .state('app.data', {
+          .state('app.searchTask', {
+            url: '/searchTask',
+            views: {
+              "content": {
+                templateUrl: 'views/blockchain/searches/searchtask.html',
+                controller: 'searchTask'
+              }
+            }
+          })
+            .state('app.dataList', {
                 url: '/data',
                 views: {
                     "content": {
@@ -153,6 +221,15 @@ angular.module('mainrouter', [
                     }
                 }
             })
+          .state('app.taskList', {
+            url: '/taskList',
+            views: {
+              "content": {
+                templateUrl: 'views/blockchain/searches/taskList.html',
+                controller: 'task'
+              }
+            }
+          })
             .state('app.login', {
                 url: '/login',
                 views: {

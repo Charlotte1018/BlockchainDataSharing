@@ -1,6 +1,6 @@
 
-angular.module("datamanagements", [])
-    .controller("provideCtrl", function ($scope) {
+angular.module("datamanagementstask", [])
+    .controller("provideCtrlTask", function ($scope) {
       //账户部分初始化
       //初始取出账户
       $scope.accounts = getRegisterAccounts();
@@ -172,7 +172,7 @@ angular.module("datamanagements", [])
         return false;
       };
     })
-    .controller("personalData", function ($scope) {
+    .controller("personalTask", function ($scope) {
       //账户部分初始化
       //初始取出账户
       $scope.accounts = getRegisterAccounts();

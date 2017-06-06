@@ -1,6 +1,6 @@
 
-angular.module("data", [])
-.controller("data", function ($scope) {
+angular.module("task", [])
+.controller("task", function ($scope) {
   $scope.taskSets = [];
 
   //获取数据

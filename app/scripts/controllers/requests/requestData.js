@@ -1,10 +1,10 @@
-angular.module("requestTask", []).controller("requestTask", function ($scope) {
+angular.module("request", []).controller("request", function ($scope) {
   //账户部分初始化
   //初始取出账户
   $scope.accounts = getRegisterAccounts();
   $scope.requestDisabled = true;
   $scope.updateDisabled = true;
-  $scope.taskSets = [];
+  $scope.dataSets = [];
   $scope.information = "";
 
   /**
@@ -21,7 +21,7 @@ angular.module("requestTask", []).controller("requestTask", function ($scope) {
    */
   $scope.isRequestLegal = function () {
     //若数据不存在或者请求者和数据提供者一致，则不合法
-    if (!$scope.isTaskExist() || $scope.isTaskRequestSame() || $scope.isTaskFinished()) {
+    if (!$scope.isDataExist() || $scope.isDataRequestSame()) {
       $scope.requestDisabled = true;
       return;
     } else {
@@ -38,14 +38,14 @@ angular.module("requestTask", []).controller("requestTask", function ($scope) {
   /**
    * 动态搜索对应数据名称是否存在
    */
-  $scope.isTaskExist = function () {
-    if (!$scope.taskName) {
-      $scope.nameError = "Please input task name!";
+  $scope.isDataExist = function () {
+    if (!$scope.dataName) {
+      $scope.nameError = "Please input data name!";
       return false;
     }
     //检查数据名称是否存在
-    if (!contractInstance.isTaskNameExist.call($scope.taskName)) {
-      $scope.nameError = "The task name is not exist!";
+    if (!contractInstance.isDataNameExist.call($scope.dataName)) {
+      $scope.nameError = "The data name is not exist!";
       return false;
     }
     return true;
@@ -54,24 +54,11 @@ angular.module("requestTask", []).controller("requestTask", function ($scope) {
   /**
    * 动态搜索请求者是否与数据提供者相同
    */
-  $scope.isTaskRequestSame = function () {
+  $scope.isDataRequestSame = function () {
     //获取数据对象合约
-    var taskObjectInstance = taskContract.at(contractInstance.getTaskAddressByTaskName.call($scope.taskName));
-    if ($scope.selectedAccount == getUserNameByAddress(taskObjectInstance.provider())) {
-      $scope.nameError = "The task requester can't not request own task!";
-      return true;
-    }
-    return false;
-  };
-
-  /**
-   * 判断任务是否已经完成
-   */
-  $scope.isTaskFinished = function () {
-    //获取数据对象合约
-    var taskObjectInstance = taskContract.at(contractInstance.getTaskAddressByTaskName.call($scope.taskName));
-    if (taskObjectInstance.isTaskStatusFinished.call()) {
-      $scope.nameError = "The task is finished!";
+    var dataObjectInstance = dataContract.at(contractInstance.getDataAddressByDataName.call($scope.dataName));
+    if ($scope.selectedAccount == getUserNameByAddress(dataObjectInstance.provider())) {
+      $scope.nameError = "The data requester can't not request own data!";
       return true;
     }
     return false;
@@ -80,13 +67,13 @@ angular.module("requestTask", []).controller("requestTask", function ($scope) {
   /**
    * 请求数据
    */
-  $scope.requestTask = function () {
+  $scope.requestData = function () {
     //解锁账户
     if (!unlockEtherAccount(getUserAddressByName($scope.selectedAccount), $scope.password)) return;
 
     //发送数据请求(需要添加参数)
     try {
-      contractInstance.requestTask($scope.taskName, $scope.information, {
+      contractInstance.requestData($scope.dataName, $scope.information, {
         from: getUserAddressByName($scope.selectedAccount),
         gas: 80000000
       });
@@ -99,24 +86,24 @@ angular.module("requestTask", []).controller("requestTask", function ($scope) {
    * 获取对应请求者请求数据列表
    */
   $scope.getRequestList = function () {
-    $scope.taskSets = [];
+    $scope.dataSets = [];
     var address = getUserAddressByName($scope.selectedAccount);
     //获取请求数据数量
-    var requestTaskNum = contractInstance.getTaskNumByRequester.call(address).toNumber();
-    for (var i = 0; i < requestTaskNum; i++) {
+    var requestDataNum = contractInstance.getDataNumByRequester.call(address).toNumber();
+    for (var i = 0; i < requestDataNum; i++) {
       //获取数据名称
-      var task = [];
-      task.taskName = web3.toAscii(contractInstance.getRequestTaskNameByIndex.call(address, i));
+      var data = [];
+      data.dataName = web3.toAscii(contractInstance.getRequestDataNameByIndex.call(address, i));
       //获取对应名称的权限合约
-      var accessContractInstance = accessContract.at(contractInstance.getTaskAccessByName.call(task.taskName));
-      task.provider = getUserNameByAddress(accessContractInstance.provider());
+      var accessContractInstance = accessContract.at(contractInstance.getDataAccessByName.call(data.dataName));
+      data.provider = getUserNameByAddress(accessContractInstance.provider());
       //获取当前状态
-      task.status = accessType[accessContractInstance.accessList(accessContractInstance.requestList(address))];
+      data.status = accessType[accessContractInstance.accessList(accessContractInstance.requestList(address))];
       //获取当前请求备注信息
-      var requestContractInstance = requestContract.at(contractInstance.getTaskRequest.call(task.taskName, address));
-      task.information = requestContractInstance.information();
+      var requestContractInstance = requestContract.at(contractInstance.getDataRequest.call(data.dataName, address));
+      data.information = requestContractInstance.information();
       //存入数据
-      $scope.taskSets.push(task);
+      $scope.dataSets.push(data);
     }
   };
 
@@ -124,11 +111,11 @@ angular.module("requestTask", []).controller("requestTask", function ($scope) {
    * 更新请求备注
    */
   $scope.updateInfo = function () {
-    if (!$scope.taskName || !$scope.information) {
+    if (!$scope.dataName || !$scope.information) {
       alert("请输入数据名称或备注");
       return;
     }
-    if (!$scope.isTaskExist()) {
+    if (!$scope.isDataExist()) {
       alert("数据名称不存在");
       return;
     }
@@ -137,7 +124,7 @@ angular.module("requestTask", []).controller("requestTask", function ($scope) {
 
     //发送修改请求
     try {
-      contractInstance.changeTaskRequestInfo($scope.taskName, $scope.information, {
+      contractInstance.changeDataRequestInfo($scope.dataName, $scope.information, {
         from: getUserAddressByName($scope.selectedAccount),
         gas: 80000000
       });
@@ -151,7 +138,7 @@ angular.module("requestTask", []).controller("requestTask", function ($scope) {
    */
   $scope.isUpdateLegal = function () {
     //判断数据是否存在
-    if (!$scope.taskName || !$scope.isTaskExist()) {
+    if (!$scope.dataName || !$scope.isDataExist()) {
       $scope.updateDisabled = true;
       $scope.nameError = "数据不存在";
       return;
@@ -166,7 +153,7 @@ angular.module("requestTask", []).controller("requestTask", function ($scope) {
     $scope.infoError = "";
 
     //判断数据是否已经被确认或者拒绝
-    if (isTaskAudited($scope.taskName, getUserAddressByName($scope.selectedAccount))) {
+    if (isDataAudited($scope.dataName, getUserAddressByName($scope.selectedAccount))) {
       $scope.infoError = "该数据已被审核，无法修改！";
       $scope.updateDisabled = true;
       return;

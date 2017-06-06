@@ -1,6 +1,6 @@
 
-angular.module("searches", [])
-    .controller("search", function ($scope) {
+angular.module("searchTask", [])
+    .controller("searchTask", function ($scope) {
       $scope.taskSets = [];
       /**
        * 根据名字搜索数据详细信息
