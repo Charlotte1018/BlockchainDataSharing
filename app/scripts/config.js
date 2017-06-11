@@ -1,6 +1,10 @@
+'use strict';
+//初始化web3
 var Web3 = require('web3');
-var http = "http://10.18.25.15:8545";
-var web3 = new Web3(Web3.providers.givenProvider || new Web3.providers.HttpProvider(http));
+var nodeAddress = "http://localhost:8545";
+var web3 = new Web3(Web3.providers.givenProvider || new Web3.providers.HttpProvider(nodeAddress));
+//初始化
+var auth = false;
 /**
  * 管理合约
  * 功能：负责对数据和权限总体的控制
@@ -51,321 +55,321 @@ var web3 = new Web3(Web3.providers.givenProvider || new Web3.providers.HttpProvi
  * getTaskRequest(bytes32 taskName, address requester) —— 根据数据名称与请求者地址，返回请求地址(address)
  * endTask(bytes32 taskName) —— 根据任务名称结束任务，返回是否成功(bool)
  */
-var contractAddress = "0x8b021396feda36969BF945fCfEB638db9eFd94F5";
+var contractAddress = "0x96BaF5494CDA0efB3c2f3D7801eE1483189c5D76";
 var abi = [{
-    "constant": false,
-    "inputs": [{"name": "taskName", "type": "bytes32"}, {"name": "requester", "type": "address"}],
-    "name": "confirmTask",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "taskName", "type": "bytes32"}, {"name": "requester", "type": "address"}],
+  "name": "confirmTask",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "taskName", "type": "bytes32"}, {"name": "requester", "type": "address"}],
-    "name": "getTaskRequest",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "taskName", "type": "bytes32"}, {"name": "requester", "type": "address"}],
+  "name": "getTaskRequest",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "dataName", "type": "bytes32"}, {"name": "requester", "type": "address"}],
-    "name": "getDataRequest",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "dataName", "type": "bytes32"}, {"name": "requester", "type": "address"}],
+  "name": "getDataRequest",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "taskName", "type": "bytes32"}, {"name": "information", "type": "string"}],
-    "name": "requestTask",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "taskName", "type": "bytes32"}, {"name": "information", "type": "string"}],
+  "name": "requestTask",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "dataName", "type": "bytes32"}, {"name": "info", "type": "string"}],
-    "name": "changeDataRequestInfo",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "dataName", "type": "bytes32"}, {"name": "info", "type": "string"}],
+  "name": "changeDataRequestInfo",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "adr", "type": "address"}],
-    "name": "getUserNameByAddress",
-    "outputs": [{"name": "", "type": "bytes32"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "adr", "type": "address"}],
+  "name": "getUserNameByAddress",
+  "outputs": [{"name": "", "type": "bytes32"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "taNa", "type": "bytes32"}],
-    "name": "isTaskNameExist",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "taNa", "type": "bytes32"}],
+  "name": "isTaskNameExist",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "provider", "type": "address"}],
-    "name": "getTaskNumByProvider",
-    "outputs": [{"name": "", "type": "uint256"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "provider", "type": "address"}],
+  "name": "getTaskNumByProvider",
+  "outputs": [{"name": "", "type": "uint256"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "adr", "type": "address"}],
-    "name": "isUserAddressExist",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "adr", "type": "address"}],
+  "name": "isUserAddressExist",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "taskName", "type": "bytes32"}, {"name": "info", "type": "string"}],
-    "name": "changeTaskRequestInfo",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "taskName", "type": "bytes32"}, {"name": "info", "type": "string"}],
+  "name": "changeTaskRequestInfo",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "taskName", "type": "bytes32"}],
-    "name": "endTask",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "taskName", "type": "bytes32"}],
+  "name": "endTask",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "userName", "type": "bytes32"}],
-    "name": "registerUser",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "userName", "type": "bytes32"}],
+  "name": "registerUser",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "type_key", "type": "bytes32"}, {"name": "type_value", "type": "bytes32"}, {
-        "name": "dataName",
-        "type": "bytes32"
-    }],
-    "name": "addTypeToData",
-    "outputs": [],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "type_key", "type": "bytes32"}, {"name": "type_value", "type": "bytes32"}, {
+    "name": "dataName",
+    "type": "bytes32"
+  }],
+  "name": "addTypeToData",
+  "outputs": [],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "requester", "type": "address"}, {"name": "index", "type": "uint256"}],
-    "name": "getRequestDataNameByIndex",
-    "outputs": [{"name": "", "type": "bytes32"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "requester", "type": "address"}, {"name": "index", "type": "uint256"}],
+  "name": "getRequestDataNameByIndex",
+  "outputs": [{"name": "", "type": "bytes32"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "requester", "type": "address"}],
-    "name": "getDataNumByRequester",
-    "outputs": [{"name": "", "type": "uint256"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "requester", "type": "address"}],
+  "name": "getDataNumByRequester",
+  "outputs": [{"name": "", "type": "uint256"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "type_key", "type": "bytes32"}, {"name": "type_value", "type": "bytes32"}],
-    "name": "getTypeAddressByName",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "type_key", "type": "bytes32"}, {"name": "type_value", "type": "bytes32"}],
+  "name": "getTypeAddressByName",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "taskName", "type": "bytes32"}],
-    "name": "getTaskAddressByTaskName",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "taskName", "type": "bytes32"}],
+  "name": "getTaskAddressByTaskName",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "taNa", "type": "bytes32"}, {"name": "intro", "type": "string"}],
-    "name": "createTask",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "taNa", "type": "bytes32"}, {"name": "intro", "type": "string"}],
+  "name": "createTask",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "index", "type": "uint256"}],
-    "name": "getTaskNameByIndex",
-    "outputs": [{"name": "", "type": "bytes32"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "index", "type": "uint256"}],
+  "name": "getTaskNameByIndex",
+  "outputs": [{"name": "", "type": "bytes32"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "daNa", "type": "bytes32"}],
-    "name": "isDataNameExist",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "daNa", "type": "bytes32"}],
+  "name": "isDataNameExist",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "requester", "type": "address"}, {"name": "index", "type": "uint256"}],
-    "name": "getRequestTaskNameByIndex",
-    "outputs": [{"name": "", "type": "bytes32"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "requester", "type": "address"}, {"name": "index", "type": "uint256"}],
+  "name": "getRequestTaskNameByIndex",
+  "outputs": [{"name": "", "type": "bytes32"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "index", "type": "uint256"}],
-    "name": "getDataNameByIndex",
-    "outputs": [{"name": "", "type": "bytes32"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "index", "type": "uint256"}],
+  "name": "getDataNameByIndex",
+  "outputs": [{"name": "", "type": "bytes32"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [],
-    "name": "chargeToContract",
-    "outputs": [],
-    "payable": true,
-    "type": "function"
+  "constant": false,
+  "inputs": [],
+  "name": "chargeToContract",
+  "outputs": [],
+  "payable": true,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "dataName", "type": "bytes32"}, {"name": "requester", "type": "address"}],
-    "name": "rejectData",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "dataName", "type": "bytes32"}, {"name": "requester", "type": "address"}],
+  "name": "rejectData",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "userName", "type": "bytes32"}],
-    "name": "isUserNameExist",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "userName", "type": "bytes32"}],
+  "name": "isUserNameExist",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [],
-    "name": "getDataNum",
-    "outputs": [{"name": "", "type": "uint256"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [],
+  "name": "getDataNum",
+  "outputs": [{"name": "", "type": "uint256"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "taskName", "type": "bytes32"}],
-    "name": "getTaskAccessByName",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "taskName", "type": "bytes32"}],
+  "name": "getTaskAccessByName",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "dataName", "type": "bytes32"}],
-    "name": "getDataAddressByDataName",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "dataName", "type": "bytes32"}],
+  "name": "getDataAddressByDataName",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "type_level1", "type": "bytes32"}, {"name": "type_level2", "type": "bytes32"}],
-    "name": "isTypeExist",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "type_level1", "type": "bytes32"}, {"name": "type_level2", "type": "bytes32"}],
+  "name": "isTypeExist",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "dataName", "type": "bytes32"}],
-    "name": "getDataAccessByName",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "dataName", "type": "bytes32"}],
+  "name": "getDataAccessByName",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "requester", "type": "address"}],
-    "name": "getTaskNumByRequester",
-    "outputs": [{"name": "", "type": "uint256"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "requester", "type": "address"}],
+  "name": "getTaskNumByRequester",
+  "outputs": [{"name": "", "type": "uint256"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [],
-    "name": "getTaskNum",
-    "outputs": [{"name": "", "type": "uint256"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [],
+  "name": "getTaskNum",
+  "outputs": [{"name": "", "type": "uint256"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "type_key", "type": "bytes32"}, {"name": "type_value", "type": "bytes32"}, {
-        "name": "taskName",
-        "type": "bytes32"
-    }],
-    "name": "addTypeToTask",
-    "outputs": [],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "type_key", "type": "bytes32"}, {"name": "type_value", "type": "bytes32"}, {
+    "name": "taskName",
+    "type": "bytes32"
+  }],
+  "name": "addTypeToTask",
+  "outputs": [],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "dataName", "type": "bytes32"}, {"name": "requester", "type": "address"}],
-    "name": "confirmData",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "dataName", "type": "bytes32"}, {"name": "requester", "type": "address"}],
+  "name": "confirmData",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "dataName", "type": "bytes32"}, {"name": "information", "type": "string"}],
-    "name": "requestData",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "dataName", "type": "bytes32"}, {"name": "information", "type": "string"}],
+  "name": "requestData",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "index", "type": "uint256"}],
-    "name": "getTaskAddressByIndex",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "index", "type": "uint256"}],
+  "name": "getTaskAddressByIndex",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "provider", "type": "address"}, {"name": "index", "type": "uint256"}],
-    "name": "getProvideDataNameByIndex",
-    "outputs": [{"name": "", "type": "bytes32"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "provider", "type": "address"}, {"name": "index", "type": "uint256"}],
+  "name": "getProvideDataNameByIndex",
+  "outputs": [{"name": "", "type": "bytes32"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "userAddress", "type": "address"}, {"name": "etherNum", "type": "uint256"}],
-    "name": "chargeToUser",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "userAddress", "type": "address"}, {"name": "etherNum", "type": "uint256"}],
+  "name": "chargeToUser",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "userName", "type": "bytes32"}],
-    "name": "getUserAddressByName",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "userName", "type": "bytes32"}],
+  "name": "getUserAddressByName",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "taskName", "type": "bytes32"}, {"name": "requester", "type": "address"}],
-    "name": "rejectTask",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "taskName", "type": "bytes32"}, {"name": "requester", "type": "address"}],
+  "name": "rejectTask",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "provider", "type": "address"}],
-    "name": "getDataNumByProvider",
-    "outputs": [{"name": "", "type": "uint256"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "provider", "type": "address"}],
+  "name": "getDataNumByProvider",
+  "outputs": [{"name": "", "type": "uint256"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "index", "type": "uint256"}],
-    "name": "getDataAddressByIndex",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "index", "type": "uint256"}],
+  "name": "getDataAddressByIndex",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "provider", "type": "address"}, {"name": "index", "type": "uint256"}],
-    "name": "getProvideTaskNameByIndex",
-    "outputs": [{"name": "", "type": "bytes32"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "provider", "type": "address"}, {"name": "index", "type": "uint256"}],
+  "name": "getProvideTaskNameByIndex",
+  "outputs": [{"name": "", "type": "bytes32"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "daNa", "type": "bytes32"}, {"name": "intro", "type": "string"}],
-    "name": "createData",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "daNa", "type": "bytes32"}, {"name": "intro", "type": "string"}],
+  "name": "createData",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {"inputs": [], "payable": true, "type": "constructor"}];
 
 /**
@@ -379,58 +383,58 @@ var abi = [{
  * provider —— 数据提供者地址(address)
  */
 var abiDataObject = [{
-    "constant": true,
-    "inputs": [],
-    "name": "provider",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [],
+  "name": "provider",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [],
-    "name": "dataName",
-    "outputs": [{"name": "", "type": "bytes32"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [],
+  "name": "dataName",
+  "outputs": [{"name": "", "type": "bytes32"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [],
-    "name": "typeNum",
-    "outputs": [{"name": "", "type": "uint256"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [],
+  "name": "typeNum",
+  "outputs": [{"name": "", "type": "uint256"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [{"name": "", "type": "uint256"}],
-    "name": "dataTypes",
-    "outputs": [{"name": "type_key", "type": "bytes32"}, {
-        "name": "type_value",
-        "type": "bytes32"
-    }, {"name": "type_address", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [{"name": "", "type": "uint256"}],
+  "name": "dataTypes",
+  "outputs": [{"name": "type_key", "type": "bytes32"}, {
+    "name": "type_value",
+    "type": "bytes32"
+  }, {"name": "type_address", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "t_key", "type": "bytes32"}, {"name": "t_value", "type": "bytes32"}, {
-        "name": "td",
-        "type": "address"
-    }],
-    "name": "setDataType",
-    "outputs": [],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "t_key", "type": "bytes32"}, {"name": "t_value", "type": "bytes32"}, {
+    "name": "td",
+    "type": "address"
+  }],
+  "name": "setDataType",
+  "outputs": [],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [],
-    "name": "introduction",
-    "outputs": [{"name": "", "type": "string"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [],
+  "name": "introduction",
+  "outputs": [{"name": "", "type": "string"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "inputs": [{"name": "daNa", "type": "bytes32"}, {"name": "intro", "type": "string"}, {
-        "name": "pro",
-        "type": "address"
-    }, {"name": "dAuth", "type": "address"}], "payable": false, "type": "constructor"
+  "inputs": [{"name": "daNa", "type": "bytes32"}, {"name": "intro", "type": "string"}, {
+    "name": "pro",
+    "type": "address"
+  }, {"name": "dAuth", "type": "address"}], "payable": false, "type": "constructor"
 }];
 /**
  * 数据对象合约
@@ -447,79 +451,79 @@ var abiDataObject = [{
  * isTaskStatusFinished() —— 返回任务是否完成(bool)
  */
 var abiTaskObject = [{
-    "constant": true,
-    "inputs": [],
-    "name": "provider",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [],
+  "name": "provider",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [],
-    "name": "dataName",
-    "outputs": [{"name": "", "type": "bytes32"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [],
+  "name": "dataName",
+  "outputs": [{"name": "", "type": "bytes32"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [],
-    "name": "typeNum",
-    "outputs": [{"name": "", "type": "uint256"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [],
+  "name": "typeNum",
+  "outputs": [{"name": "", "type": "uint256"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [{"name": "", "type": "uint256"}],
-    "name": "dataTypes",
-    "outputs": [{"name": "type_key", "type": "bytes32"}, {
-        "name": "type_value",
-        "type": "bytes32"
-    }, {"name": "type_address", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [{"name": "", "type": "uint256"}],
+  "name": "dataTypes",
+  "outputs": [{"name": "type_key", "type": "bytes32"}, {
+    "name": "type_value",
+    "type": "bytes32"
+  }, {"name": "type_address", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [],
-    "name": "taskStatus",
-    "outputs": [{"name": "", "type": "uint8"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [],
+  "name": "taskStatus",
+  "outputs": [{"name": "", "type": "uint8"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "t_key", "type": "bytes32"}, {"name": "t_value", "type": "bytes32"}, {
-        "name": "td",
-        "type": "address"
-    }],
-    "name": "setDataType",
-    "outputs": [],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "t_key", "type": "bytes32"}, {"name": "t_value", "type": "bytes32"}, {
+    "name": "td",
+    "type": "address"
+  }],
+  "name": "setDataType",
+  "outputs": [],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [],
-    "name": "endTask",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [],
+  "name": "endTask",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [],
-    "name": "introduction",
-    "outputs": [{"name": "", "type": "string"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [],
+  "name": "introduction",
+  "outputs": [{"name": "", "type": "string"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [],
-    "name": "isTaskStatusFinished",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [],
+  "name": "isTaskStatusFinished",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "inputs": [{"name": "daNa", "type": "bytes32"}, {"name": "intro", "type": "string"}, {
-        "name": "pro",
-        "type": "address"
-    }, {"name": "dAuth", "type": "address"}], "payable": false, "type": "constructor"
+  "inputs": [{"name": "daNa", "type": "bytes32"}, {"name": "intro", "type": "string"}, {
+    "name": "pro",
+    "type": "address"
+  }, {"name": "dAuth", "type": "address"}], "payable": false, "type": "constructor"
 }];
 
 /**
@@ -533,54 +537,54 @@ var abiTaskObject = [{
  * taskNum —— 任务总数(uint)
  */
 var abiTypeObject = [{
-    "constant": true,
-    "inputs": [],
-    "name": "dataNum",
-    "outputs": [{"name": "", "type": "uint256"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [],
+  "name": "dataNum",
+  "outputs": [{"name": "", "type": "uint256"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [{"name": "", "type": "uint256"}],
-    "name": "dataSets",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [{"name": "", "type": "uint256"}],
+  "name": "dataSets",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [],
-    "name": "taskNum",
-    "outputs": [{"name": "", "type": "uint256"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [],
+  "name": "taskNum",
+  "outputs": [{"name": "", "type": "uint256"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "taskSet", "type": "address"}],
-    "name": "addTaskSet",
-    "outputs": [],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "taskSet", "type": "address"}],
+  "name": "addTaskSet",
+  "outputs": [],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [{"name": "", "type": "uint256"}],
-    "name": "taskSets",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [{"name": "", "type": "uint256"}],
+  "name": "taskSets",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "dataSet", "type": "address"}],
-    "name": "addDataSet",
-    "outputs": [],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "dataSet", "type": "address"}],
+  "name": "addDataSet",
+  "outputs": [],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [],
-    "name": "typeName",
-    "outputs": [{"name": "", "type": "bytes32"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [],
+  "name": "typeName",
+  "outputs": [{"name": "", "type": "bytes32"}],
+  "payable": false,
+  "type": "function"
 }, {"inputs": [{"name": "tyNa", "type": "bytes32"}], "payable": false, "type": "constructor"}];
 
 /**
@@ -599,93 +603,93 @@ var abiTypeObject = [{
  * isRequestReject(address requester) —— 返回是否拒绝对应请求者的数据请求(bool)
  */
 var abiAccessObject = [{
-    "constant": true,
-    "inputs": [{"name": "", "type": "address"}],
-    "name": "requestList",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [{"name": "", "type": "address"}],
+  "name": "requestList",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [],
-    "name": "provider",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [],
+  "name": "provider",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [],
-    "name": "requesterNum",
-    "outputs": [{"name": "", "type": "uint256"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [],
+  "name": "requesterNum",
+  "outputs": [{"name": "", "type": "uint256"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "requester", "type": "address"}],
-    "name": "isRequestExist",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "requester", "type": "address"}],
+  "name": "isRequestExist",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "requester", "type": "address"}],
-    "name": "isRequestReject",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "requester", "type": "address"}],
+  "name": "isRequestReject",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [{"name": "", "type": "address"}],
-    "name": "accessList",
-    "outputs": [{"name": "", "type": "uint8"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [{"name": "", "type": "address"}],
+  "name": "accessList",
+  "outputs": [{"name": "", "type": "uint8"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "requester", "type": "address"}],
-    "name": "isRequestConfirm",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "requester", "type": "address"}],
+  "name": "isRequestConfirm",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "requester", "type": "address"}, {"name": "information", "type": "string"}],
-    "name": "addRequest",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "requester", "type": "address"}, {"name": "information", "type": "string"}],
+  "name": "addRequest",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "requester", "type": "address"}],
-    "name": "confirmRequest",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "requester", "type": "address"}],
+  "name": "confirmRequest",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "requester", "type": "address"}],
-    "name": "rejectRequest",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "requester", "type": "address"}],
+  "name": "rejectRequest",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": false,
-    "inputs": [{"name": "requester", "type": "address"}, {"name": "info", "type": "string"}],
-    "name": "updateRequestInfo",
-    "outputs": [{"name": "", "type": "bool"}],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "requester", "type": "address"}, {"name": "info", "type": "string"}],
+  "name": "updateRequestInfo",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [{"name": "", "type": "uint256"}],
-    "name": "requesterList",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [{"name": "", "type": "uint256"}],
+  "name": "requesterList",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "inputs": [{"name": "pro", "type": "address"}, {"name": "dataM", "type": "address"}],
-    "payable": false,
-    "type": "constructor"
+  "inputs": [{"name": "pro", "type": "address"}, {"name": "dataM", "type": "address"}],
+  "payable": false,
+  "type": "constructor"
 }];
 
 /**
@@ -697,30 +701,30 @@ var abiAccessObject = [{
  *
  */
 var abiRequestObject = [{
-    "constant": false,
-    "inputs": [{"name": "info", "type": "string"}],
-    "name": "updateInformation",
-    "outputs": [],
-    "payable": false,
-    "type": "function"
+  "constant": false,
+  "inputs": [{"name": "info", "type": "string"}],
+  "name": "updateInformation",
+  "outputs": [],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [],
-    "name": "requester",
-    "outputs": [{"name": "", "type": "address"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [],
+  "name": "requester",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "constant": true,
-    "inputs": [],
-    "name": "information",
-    "outputs": [{"name": "", "type": "string"}],
-    "payable": false,
-    "type": "function"
+  "constant": true,
+  "inputs": [],
+  "name": "information",
+  "outputs": [{"name": "", "type": "string"}],
+  "payable": false,
+  "type": "function"
 }, {
-    "inputs": [{"name": "req", "type": "address"}, {"name": "info", "type": "string"}],
-    "payable": false,
-    "type": "constructor"
+  "inputs": [{"name": "req", "type": "address"}, {"name": "info", "type": "string"}],
+  "payable": false,
+  "type": "constructor"
 }];
 
 //获取管理合约
@@ -739,76 +743,15 @@ var taskStatus = ["Unfinished", "Finished"];
 //记录已经注册的用户
 var registerAccounts = [];
 
-/**
- * 解锁账户
- * @param accountAddress
- * @param password
- */
-function unlockEtherAccount(accountAddress, password) {
-    //解锁账户
-    try {
-        web3.personal.unlockAccount(accountAddress, password);
-        return true;
-    } catch (err) {
-        console.log(err);
-        alert("You haven't connect to ethereum or the password cannot match the account!");
-        return false;
-    }
-}
 
-/**
- * 获取所有已经注册的用户
- */
-function getRegisterAccounts() {
-    var allUser = web3.eth.accounts;
-    registerAccounts = [];
-    //循环判断所有账户名称
-    for (var i = 0; i < allUser.length; i++) {
-        if (isTheUserAddressRegister(allUser[i])) {
-            var account = [];
-            account.address = allUser[i];
-            account.userName = getUserNameByAddress(account.address);
-            registerAccounts.push(account);
-        }
-    }
-    return registerAccounts;
-}
 
-/**
- * 根据地址返回用户名
- * @param accountAddress
- * @returns {string}
- */
-function getUserNameByAddress(accountAddress) {
-    //判断用户是否存在
-    if (!isTheUserAddressRegister(accountAddress)) return "";
-    //返回用户名
-    return web3.toAscii(contractInstance.getUserNameByAddress.call(accountAddress));
-}
-/**
- * 根据用户名返回地址
- * @param userName
- * @returns {*}
- */
-function getUserAddressByName(userName) {
-    return contractInstance.getUserAddressByName.call(userName);
-}
-
-/**
- * 根据用户地址返回是否已经注册
- * @param address
- * @returns {boolean}
- */
-function isTheUserAddressRegister(address) {
-    return contractInstance.isUserAddressExist.call(address);
-}
 /**
  * 返回对应数据是否已经被确认或者拒绝
  * @param dataName
  * @param requester
  * @returns {boolean}
  */
-function isDataAudited(dataName, requester){
+function isDataAudited(dataName, requester) {
   //获取数据权限
   var accessContractInstance = accessContract.at(contractInstance.getDataAccessByName.call(dataName));
   //获取对应请求结果
@@ -849,11 +792,90 @@ angular
       requireBase: false
     })
   }]);
-  angular.module('config',[])
-  .controller('config',function($scope){
+angular.module('config', [])
+  .controller('config', function ($scope) {
+    getConfig();
+    /**
+     * 更新系统设置
+     */
+    $scope.updateConfig = function () {
+      //如果节点地址变化，更新
+      if ($scope.httpAddress && $scope.httpAddress != nodeAddress) {
+        updateNodeAddress($scope.httpAddress);
+        $scope.httpAddress = nodeAddress;
+      }
+      //如果合约地址变化，更新
+      if ($scope.contractAddress && $scope.contractAddress != contractAddress) {
+        updateContractAddress($scope.contractAddress);
+        $scope.contractAddress = contractAddress;
+      }
+
+      //如果角色发生变化
+      if ($scope.role && $scope.role != auth.toString()) {
+        //如果切换为管理员
+        if ($scope.role == "true") {
+          switchToManager($scope.password);
+        } else {
+          switchToUser();
+        }
+      }
+      getConfig();
+    };
+
+    /**
+     * 读取最新配置
+     */
+    function getConfig() {
+      //读取基本配置
       $scope.contractAddress = contractAddress;
-    //   $scope.Web3 = require('web3');
-    //   $scope.web3 = new Web3();
-    //   $scope.web3.setProvider(new web3.providers.HttpProvider($scope.httpAddress));
-      $scope.httpAddress=http;
-  })
+      $scope.httpAddress = nodeAddress;
+      if (false == auth) $scope.status = "User";
+      else $scope.status = "Manager";
+    }
+  });
+
+/**
+ * 更新合约地址，重新获取管理合约对象
+ * @param newContractAddress
+ */
+function updateContractAddress(newContractAddress) {
+  //判断合约地址是否合法
+  if (isAddress(newContractAddress)) {
+    contractAddress = newContractAddress;
+    contractInstance = contract.at(contractAddress);
+  } else {
+    alert("合约地址格式不正确");
+  }
+}
+
+/**
+ * 更新节点地址，重新获取web3对象
+ * @param newNodeAddress
+ */
+function updateNodeAddress(newNodeAddress) {
+  nodeAddress = newNodeAddress;
+  web3 = new Web3(Web3.providers.givenProvider || new Web3.providers.HttpProvider(nodeAddress));
+}
+
+/**
+ * 切换为管理员
+ */
+function switchToManager(password) {
+  if (!password) {
+    alert("请输入管理员密码！");
+    return;
+  }
+  if (password == "admin") {
+    auth = true;
+    alert("管理员身份切换成功");
+  } else {
+    alert("密码错误");
+  }
+}
+
+function switchToUser() {
+  auth = false;
+  alert("用户身份切换成功");
+};
+
+

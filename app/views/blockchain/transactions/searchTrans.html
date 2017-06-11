@@ -1,0 +1,53 @@
+<body>
+<section class="profile-nav alt green-border ">
+  <section class="wrapper ">
+    <div ng-show="accounts.length > 0">
+      <section class="panel col-lg-10 col-lg-offset-1">
+        <header class="panel-heading">
+          <h4>Transaction Search</h4>
+        </header>
+        <br>
+        <div class="form-group">
+          <label class="col-lg-1">From : </label>
+          <input ng-model="transAddressFrom" class="col-lg-5">
+          <label class="col-lg-1">To :</label>
+          <input ng-model="transAddressTo" class="col-lg-5">
+        </div>
+        <br>
+        <div class="form-group">
+          <button type="submit" class="btn btn-success col-lg-2 col-lg-offset-10" ng-click="getTrans()">Search</button>
+        </div>
+        <br/><br/>
+        <table class="table table-striped border-top">
+          <thead>
+          <tr>
+            <th style="width:8px;"><input type="checkbox" class="group-checkable"/></th>
+            <th>From</th>
+            <th class="hidden-phone">To</th>
+            <th class="hidden-phone">Amount (Ether)</th>
+            <th class="hidden-phone">Block Number</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="odd gradeX" ng-repeat="tranSet in tranSets">
+            <td><input type="checkbox" class="checkboxes" value="1"/></td>
+            <td>{{tranSet.from}}</td>
+            <td class="hidden-phone">
+              {{tranSet.to}}
+            </td>
+            <td class="hidden-phone">{{tranSet.amount}}</td>
+            <td>{{tranSet.blockNum }}</td>
+          </tr>
+          </tbody>
+        </table>
+        <header class="panel-heading"></header>
+      </section>
+      <!--<div class="form-group">
+          <div class="col-lg-offset-2 col-lg-10">
+              <button type="submit" class="btn btn-danger col-lg-2" ng-click="getProvideData()">Show</button>
+          </div>
+      </div>-->
+    </div>
+  </section>
+</section>
+</body>

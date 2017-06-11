@@ -1,4 +1,4 @@
-
+'use strict';
 angular.module("provideTask", []).controller("provideTask", function ($scope) {
   //账户部分初始化
   //初始取出已注册的账户
@@ -44,7 +44,9 @@ angular.module("provideTask", []).controller("provideTask", function ($scope) {
       return;
     }
     //解锁账户
-    if (!unlockEtherAccount(getUserAddressByName($scope.selectedAccount), $scope.password)) return;
+    if (!unlockEtherAccount(getUserAddressByName($scope.selectedAccount), $scope.password)) {
+      return;
+    }
     //添加数据
     try {
       //添加数据源
@@ -53,7 +55,7 @@ angular.module("provideTask", []).controller("provideTask", function ($scope) {
         gas: 80000000
       });
       //添加数据类型
-      for (var i = 0; i < $scope.types.length; i++) {
+      for (i = 0; i < $scope.types.length; i++) {
         contractInstance.addTypeToTask($scope.types[i].key, $scope.types[i].value, $scope.taskName, {
           from: getUserAddressByName($scope.selectedAccount),
           gas: 80000000
@@ -92,7 +94,9 @@ angular.module("provideTask", []).controller("provideTask", function ($scope) {
       if (!$scope.taskName) {
         $scope.nameError = "Please input data name.";
       }
-      else $scope.nameError = "";
+      else {
+        $scope.nameError = "";
+      }
     }
   };
 
@@ -126,6 +130,8 @@ angular.module("provideTask", []).controller("provideTask", function ($scope) {
       $scope.taskSets.push(taskSet);
     }
     //设置默认名称
-    if (provideNum > 0) $scope.selectedTask = $scope.taskSets[0].taskName;
+    if (provideNum > 0) {
+      $scope.selectedTask = $scope.taskSets[0].taskName;
+    }
   };
 });

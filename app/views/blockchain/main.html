@@ -22,7 +22,7 @@
 </header>
 
 <aside id="sidebar" class="nav-collapse" toggle-menu>
-  <ul class="sidebar-menu">
+  <ul class="sidebar-menu" ng-click="clickMenu()">
     <li class="active">
       <a ui-sref="app.home">
           <i class="fa fa-home"></i><span>Home</span>
@@ -81,6 +81,13 @@
         <li><a ui-sref="app.personalDataControl">Provide Data control</a></li>
         <li><a ui-sref="app.personalTaskList">Personal Task List</a></li>
         <li><a ui-sref="app.personalTaskControl">Provide Task control</a></li>
+      </ul>
+    </li>
+    <li class="sub-menu">
+      <a><i class="fa fa-group"></i><span> Transactions</span><span class="arrow"></span>
+      </a>
+      <ul class="sub">
+        <li><a ui-sref="app.searchTransByAccount">Search Transaction</a></li>
       </ul>
     </li>
     <!--<li>
