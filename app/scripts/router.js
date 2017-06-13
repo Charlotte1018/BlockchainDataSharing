@@ -50,8 +50,8 @@ angular.module('mainrouter', [
           }
         }
       })
-      .state('app.creatAccount', {
-        url: '/creatAccount',
+      .state('app.createAccount', {
+        url: '/createAccount',
         views: {
           "content": {
             templateUrl: 'views/blockchain/accounts/createAccount.html',
@@ -214,10 +214,19 @@ angular.module('mainrouter', [
         }
       })
       .state('app.searchTransByAccount', {
-        url: '/searchTask',
+        url: '/searchTransByAccount',
         views: {
           "content": {
             templateUrl: 'views/blockchain/transactions/searchTrans.html',
+            controller: 'transactions'
+          }
+        }
+      })
+      .state('app.etherTrans', {
+        url: '/etherTrans',
+        views: {
+          "content": {
+            templateUrl: 'views/blockchain/transactions/etherTrans.html',
             controller: 'transactions'
           }
         }

@@ -34,9 +34,9 @@
       </a>
       <ul class="sub">
         <li><a ui-sref="app.accountsList">Account List</a></li>
-        <li><a ui-sref="app.creatAccount">Create Accounts</a></li>
+        <li><a ui-sref="app.createAccount">Create Accounts</a></li>
         <li><a ui-sref="app.getBalance">Get Balance</a></li>
-        <li><a ui-sref="app.chargeAccount">Charge Account</a></li>
+        <li ng-show="auth"><a ui-sref="app.chargeAccount">Charge Account</a></li>
         <li><a ui-sref="app.registerAccounts">Register Accounts</a></li>
         <li><a ui-sref="app.registerAccountsList">Register Accounts List </a></li>
       </ul>
@@ -88,6 +88,7 @@
       </a>
       <ul class="sub">
         <li><a ui-sref="app.searchTransByAccount">Search Transaction</a></li>
+        <li><a ui-sref="app.etherTrans">Ether Transaction</a></li>
       </ul>
     </li>
     <!--<li>

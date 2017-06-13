@@ -18,6 +18,14 @@ angular.module("accounts", []).controller("accounts", function ($scope) {
       //$scope.balance = web3.fromWei($scope.balance, 'ether');
     }
   });
+  /**
+   * 更新注册账户列表
+   * param  accountPassword-密码
+   * return newAccountAddress-新账户地址
+   */
+  $scope.getRegisterAccounts = function () {
+    getRegisterAccounts();
+  };
 
   /**
    * 创建新账户
@@ -88,7 +96,7 @@ angular.module("accounts", []).controller("accounts", function ($scope) {
       $scope.nameError = "The user address has been registered";
       return false;
     }
-    if(isUserNameRegister(userName)){
+    if (isUserNameRegister(userName)) {
       $scope.nameError = "The user name has been registered";
       return false;
     }
@@ -150,6 +158,7 @@ function getRegisterAccounts() {
     var account = [];
     account.userName = web3.toAscii(contractInstance.getUserNameByIndex.call(i));
     account.address = getUserAddressByName(account.userName);
+    account.balance = getBalanceByAddress(account.address);
     accounts.push(account);
   }
   return accounts;
@@ -178,6 +187,7 @@ function unlockEtherAccount(accountAddress, password) {
  * @returns {Boolean|*}
  */
 function isAddress(address) {
+  if (!address) return false;
   return web3.isAddress(address);
 }
 
@@ -304,28 +314,4 @@ function createAccount(password) {
   }
 }
 
-/**
- * 转账功能
- * @param from
- * @param to
- * @param password
- * @param ether
- * @param data
- * @returns {boolean}
- */
-function chargeAccount(from, to, password, ether, data) {
-  if (!unlockEtherAccount(from, password)) {
-    return;
-  }
-  try {
-    web3.eth.sendTransaction({
-      from: from,
-      to: to,
-      value: web3.toWei(ether),
-      data: data
-    });
-  } catch (err) {
-    return false;
-  }
-  return true;
-}
+

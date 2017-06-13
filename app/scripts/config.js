@@ -4,7 +4,7 @@ var Web3 = require('web3');
 var nodeAddress = "http://localhost:8545";
 var web3 = new Web3(Web3.providers.givenProvider || new Web3.providers.HttpProvider(nodeAddress));
 //初始化
-var auth = false;
+var auth = true;
 /**
  * 管理合约
  * 功能：负责对数据和权限总体的控制

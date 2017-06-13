@@ -1,7 +1,8 @@
 <body>
 <section class="profile-nav alt green-border ">
   <section class="wrapper ">
-    <div ng-show="accounts.length > 0">
+    <label ng-show="registerAccounts.length <= 0">No Register Accounts</label>
+    <div ng-show="registerAccounts.length > 0">
       <section class="panel col-lg-10 col-lg-offset-1">
         <header class="panel-heading">
           <h4>Register Accounts List</h4>
@@ -19,7 +20,7 @@
             <th style="width:8px;"><input type="checkbox" class="group-checkable"/></th>
             <th>User Name</th>
             <th class="hidden-phone">Account address</th>
-
+            <th>Balance(Ether)</th>
           </tr>
           </thead>
           <tbody>
@@ -27,6 +28,7 @@
             <td><input type="checkbox" class="checkboxes" value="1"/></td>
             <td class="hidden-phone">{{account.userName}}</td>
             <td>{{account.address}}</td>
+            <td>{{account.balance}}</td>
           </tr>
           </tbody>
         </table>
