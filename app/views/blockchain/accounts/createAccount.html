@@ -11,24 +11,18 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Password</label>
                             <div class="col-lg-10">
-                                <input type="password" class="form-control" id="inputPassword1" placeholder="Password" ng-model="accountPassword">
+                                <input type="password" class="form-control" id="inputPassword1" placeholder="Password" ng-model="password">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-lg-offset-2 col-lg-10">
-                                <button type="submit" class="btn btn-danger" ng-click="createAccount()">Create Accounts</button>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Status</label>
-                            <div class="col-lg-10">
-                                <h5 class="col-lg-10 form-control">{{createAccountStatus}}</h5>
+                                <button type="submit" class="btn btn-danger" ng-click="createAccount(password)">Create Accounts</button>
                             </div>
                         </div>
                         <div class="form-group form-horizontal">
-                            <label class="col-lg-2 control-label">Hash</label>
+                            <label class="col-lg-2 control-label">Your address</label>
                             <div class="col-lg-10">
-                                <h5 class="col-lg-10 form-control">{{newAccountAddress}}</h5>
+                                <h5 class="col-lg-10 form-control">{{newAddress}}</h5>
                             </div>
                         </div>
                     </form>

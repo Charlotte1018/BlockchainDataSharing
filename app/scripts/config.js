@@ -17,7 +17,9 @@ var auth = false;
  * isUserAddressExist(bytes32 address) —— 返回用户地址是否存在(bool)
  * getUserNameByAddress(address adr) —— 根据用户地址返回用户名(bytes32)
  * getUserAddressByName(bytes32 userName) —— 根据用户名返回用户地址(address)
- * createData(bytes32 daNa, string intro) —— 根据用户名和介绍创建数据，返回数据对象地址(address)
+ * getUsersNumber() —— 返回用户数量(uint)
+ * getUserNameByIndex(uint index) —— 根据下标返回用户名称
+ * createData(bytes32 daNa, string intro, string cap, bytes32 cap_pwd) —— 根据用户名、介绍、权限、权限密码创建数据，返回数据对象地址(address)
  * createTask(bytes32 taNa, string intro) —— 根据用户名和介绍创建任务，返回任务对象地址(address)
  * isDataNameExist(bytes32 daNa) —— 根据数据名，返回是否存在(bool)
  * isTaskNameExist(bytes32 daNa) —— 根据任务名，返回是否存在(bool)
@@ -43,7 +45,7 @@ var auth = false;
  * getTaskNumByRequester(address requester) —— 根据请求者地址，获取请求者请求的任务量(uint)
  * getRequestDataNameByIndex(address requester, uint index) —— 根据请求者地址和下标，获取请求的数据名称(bytes32)
  * getRequestTaskNameByIndex(address requester, uint index) —— 根据请求者地址和下标，获取请求的任务名称(bytes32)
- * requestData(bytes32 dataName, string information) —— 根据数据名称对数据发起请求，并携带备注信息，返回是否成功(bool)
+ * requestData(bytes32 dataName, bytes32 requestT, string information) —— 根据数据名称、请求密码对数据发起请求，并携带备注信息，返回是否成功(bool)
  * requestTask(bytes32 taskName, string information) —— 根据任务名称对任务发起请求，并携带备注信息，返回是否成功(bool)
  * rejectData(bytes32 dataName, address requester) —— 根据地址和数据名称，拒绝数据请求
  * rejectTask(bytes32 taskName, address requester) —— 根据地址和任务名称，拒绝任务请求
@@ -54,8 +56,9 @@ var auth = false;
  * getDataRequest(bytes32 dataName, address requester) —— 根据数据名称与请求者地址，返回请求地址(address)
  * getTaskRequest(bytes32 taskName, address requester) —— 根据数据名称与请求者地址，返回请求地址(address)
  * endTask(bytes32 taskName) —— 根据任务名称结束任务，返回是否成功(bool)
+ * setDataCapability(bytes32 dataName, bytes32 cap_pwd, string cap) —— 根据数据名称、权限密码和新权限字段设置权限，返回是否成功(bool)
  */
-var contractAddress = "0x96BaF5494CDA0efB3c2f3D7801eE1483189c5D76";
+var contractAddress = "0x2fB91F8C6c1C6b2F13B1403CE244778B10f12a8B";
 var abi = [{
   "constant": false,
   "inputs": [{"name": "taskName", "type": "bytes32"}, {"name": "requester", "type": "address"}],
@@ -96,6 +99,16 @@ var abi = [{
   "inputs": [{"name": "adr", "type": "address"}],
   "name": "getUserNameByAddress",
   "outputs": [{"name": "", "type": "bytes32"}],
+  "payable": false,
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{"name": "dataName", "type": "bytes32"}, {"name": "requestT", "type": "bytes32"}, {
+    "name": "information",
+    "type": "string"
+  }],
+  "name": "requestData",
+  "outputs": [{"name": "", "type": "bool"}],
   "payable": false,
   "type": "function"
 }, {
@@ -236,6 +249,37 @@ var abi = [{
   "type": "function"
 }, {
   "constant": false,
+  "inputs": [{"name": "taskName", "type": "bytes32"}],
+  "name": "isTaskFinished",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{"name": "index", "type": "uint256"}],
+  "name": "getUserNameByIndex",
+  "outputs": [{"name": "", "type": "bytes32"}],
+  "payable": false,
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{"name": "daNa", "type": "bytes32"}, {"name": "intro", "type": "string"}, {
+    "name": "cap",
+    "type": "string"
+  }, {"name": "cap_pwd", "type": "bytes32"}],
+  "name": "createData",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [],
+  "name": "getUsersNumber",
+  "outputs": [{"name": "", "type": "uint256"}],
+  "payable": false,
+  "type": "function"
+}, {
+  "constant": false,
   "inputs": [],
   "name": "getDataNum",
   "outputs": [{"name": "", "type": "uint256"}],
@@ -285,6 +329,16 @@ var abi = [{
   "type": "function"
 }, {
   "constant": false,
+  "inputs": [{"name": "dataName", "type": "bytes32"}, {"name": "cap_pwd", "type": "bytes32"}, {
+    "name": "cap",
+    "type": "string"
+  }],
+  "name": "setDataCapability",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
+}, {
+  "constant": false,
   "inputs": [{"name": "type_key", "type": "bytes32"}, {"name": "type_value", "type": "bytes32"}, {
     "name": "taskName",
     "type": "bytes32"
@@ -297,13 +351,6 @@ var abi = [{
   "constant": false,
   "inputs": [{"name": "dataName", "type": "bytes32"}, {"name": "requester", "type": "address"}],
   "name": "confirmData",
-  "outputs": [{"name": "", "type": "bool"}],
-  "payable": false,
-  "type": "function"
-}, {
-  "constant": false,
-  "inputs": [{"name": "dataName", "type": "bytes32"}, {"name": "information", "type": "string"}],
-  "name": "requestData",
   "outputs": [{"name": "", "type": "bool"}],
   "payable": false,
   "type": "function"
@@ -361,13 +408,6 @@ var abi = [{
   "inputs": [{"name": "provider", "type": "address"}, {"name": "index", "type": "uint256"}],
   "name": "getProvideTaskNameByIndex",
   "outputs": [{"name": "", "type": "bytes32"}],
-  "payable": false,
-  "type": "function"
-}, {
-  "constant": false,
-  "inputs": [{"name": "daNa", "type": "bytes32"}, {"name": "intro", "type": "string"}],
-  "name": "createData",
-  "outputs": [{"name": "", "type": "address"}],
   "payable": false,
   "type": "function"
 }, {"inputs": [], "payable": true, "type": "constructor"}];
@@ -437,14 +477,14 @@ var abiDataObject = [{
   }, {"name": "dAuth", "type": "address"}], "payable": false, "type": "constructor"
 }];
 /**
- * 数据对象合约
+ * 任务对象合约
  * 功能：获取数据详细信息
  * 可访问变量：
  * dataTypes[] —— 根据下标返回类型结构体json对象{bytes32 type_key,bytes32 type_value,address type_address}
  * typeNum —— 返回类型数量(uint)
- * dataName —— 数据名称(bytes32)
- * introduction —— 数据介绍(string)
- * provider —— 数据提供者地址(address)
+ * dataName —— 任务名称(bytes32)
+ * introduction —— 任务介绍(string)
+ * provider —— 任务提供者地址(address)
  * taskStatus —— 任务状态(TaskStatus{Unfinished, Finished})
  *
  * 可访问函数：
@@ -598,6 +638,7 @@ var abiTypeObject = [{
  * provider —— 返回数据提供者地址
  *
  * 可调用函数：
+ * getCapability(bytes32 requestT) —— 根据数据请求密码获取权限(string)
  * isRequestExist(address requester) —— 返回请求者是否请求过该数据(bool)
  * isRequestConfirm(address requester) —— 返回是否确认对应请求者的数据请求(bool)
  * isRequestReject(address requester) —— 返回是否拒绝对应请求者的数据请求(bool)
@@ -653,16 +694,23 @@ var abiAccessObject = [{
   "type": "function"
 }, {
   "constant": false,
-  "inputs": [{"name": "requester", "type": "address"}, {"name": "information", "type": "string"}],
-  "name": "addRequest",
+  "inputs": [{"name": "requester", "type": "address"}],
+  "name": "confirmRequest",
   "outputs": [{"name": "", "type": "bool"}],
   "payable": false,
   "type": "function"
 }, {
   "constant": false,
-  "inputs": [{"name": "requester", "type": "address"}],
-  "name": "confirmRequest",
-  "outputs": [{"name": "", "type": "bool"}],
+  "inputs": [{"name": "requestT", "type": "bytes32"}],
+  "name": "getCapability",
+  "outputs": [{"name": "", "type": "string"}],
+  "payable": false,
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{"name": "cap_pwd", "type": "bytes32"}, {"name": "cap", "type": "string"}],
+  "name": "setCapability",
+  "outputs": [],
   "payable": false,
   "type": "function"
 }, {
@@ -680,6 +728,16 @@ var abiAccessObject = [{
   "payable": false,
   "type": "function"
 }, {
+  "constant": false,
+  "inputs": [{"name": "requester", "type": "address"}, {"name": "requestT", "type": "bytes32"}, {
+    "name": "information",
+    "type": "string"
+  }],
+  "name": "addRequest",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
+}, {
   "constant": true,
   "inputs": [{"name": "", "type": "uint256"}],
   "name": "requesterList",
@@ -687,9 +745,10 @@ var abiAccessObject = [{
   "payable": false,
   "type": "function"
 }, {
-  "inputs": [{"name": "pro", "type": "address"}, {"name": "dataM", "type": "address"}],
-  "payable": false,
-  "type": "constructor"
+  "inputs": [{"name": "pro", "type": "address"}, {"name": "dataM", "type": "address"}, {
+    "name": "cap_accessT",
+    "type": "string"
+  }, {"name": "cap_pwd", "type": "bytes32"}], "payable": false, "type": "constructor"
 }];
 
 /**
@@ -742,7 +801,6 @@ var accessType = ["Init", "Pending", "Reject", "Confirm"];
 var taskStatus = ["Unfinished", "Finished"];
 //记录已经注册的用户
 var registerAccounts = [];
-
 
 
 /**
@@ -831,6 +889,7 @@ angular.module('config', [])
       $scope.httpAddress = nodeAddress;
       if (false == auth) $scope.status = "User";
       else $scope.status = "Manager";
+      $scope.auth = auth;
     }
   });
 

@@ -1,9 +1,10 @@
-"use strict";
 angular.module("accounts", []).controller("accounts", function ($scope) {
   //账户部分初始化
-  //初始取出账户
-  $scope.accounts = web3.eth.accounts;
+  //分别取出节点所有账户、所有注册的账户、节点上已经注册的账户
+  $scope.nodeAccounts = getNodeAccounts();
   $scope.registerAccounts = getRegisterAccounts();
+  $scope.nodeRegisterAccounts = getNodeRegisterAccounts();
+
   /**
    * 页面加载完后自动显示第一个用户名
    */
@@ -18,33 +19,17 @@ angular.module("accounts", []).controller("accounts", function ($scope) {
     }
   });
 
-
-  /**
-   * 获取所有账户地址
-   * return 所有账户地址数组
-   */
-  $scope.getAccounts = function () {
-    $scope.accounts = web3.eth.accounts;
-  };
-
-  $scope.getRegisterAccounts = function () {
-    $scope.registerAccounts = getRegisterAccounts();
-
-  };
-
   /**
    * 创建新账户
    * param  accountPassword-密码
-   * return createAccountStatus-是否成功, newAccountAddress-新账户地址
+   * return newAccountAddress-新账户地址
    */
-  $scope.createAccount = function () {
-
-    if (web3.personal.newAccount($scope.accountPassword)) {
-      $scope.createAccountStatus = "create success";
-      $scope.newAccountAddress = web3.eth.accounts[web3.eth.accounts.length - 1];
-    } else {
-      $scope.createAccountStatus = "create fail";
+  $scope.createAccount = function (password) {
+    if (!password) {
+      alert("请输入密码");
+      return;
     }
+    $scope.newAddress = createAccount(password);
   }
 
   /**
@@ -52,9 +37,8 @@ angular.module("accounts", []).controller("accounts", function ($scope) {
    * param selectedAccount-选中的账户地址
    * return balance-账户余额（单位为以太）
    */
-  $scope.getBalance = function () {
-    $scope.balance = web3.eth.getBalance(getUserAddressByName($scope.selectedAccount));
-    $scope.balance = web3.fromWei($scope.balance, 'ether');
+  $scope.getBalance = function (address) {
+    $scope.balance = getBalanceByAddress(address);
   }
 
   /**
@@ -62,65 +46,51 @@ angular.module("accounts", []).controller("accounts", function ($scope) {
    * param selectedAccountFrom-发送方地址, selectedAccountTo-交易方地址, chargeEthers-交易数额, unlockPassword-发送方密码
    * return msg-交易哈希
    */
-  $scope.chargeAccount = function () {
-    $scope.selectedAccountFrom = $scope.accounts[0];
-    $scope.selectedAccountTo = $scope.accounts[0];
-    console.log("Charge from " + $scope.selectedAccountFrom + "  to " + $scope.selectedAccountTo);
-    web3.personal.unlockAccount($scope.selectedAccountFrom, $scope.unlockPassword);
-    $scope.msg = web3.eth.sendTransaction({
-      from: $scope.selectedAccountFrom,
-      to: $scope.selectedAccountTo,
-      value: web3.toWei($scope.chargeEthers)
-    });
+  $scope.chargeAccount = function (from, to, password, ether, data) {
+    if (!from || !to || !password || !ether) {
+      alert("请填完善信息！");
+      return;
+    }
+    if (chargeAccount(from, to, password, ether, data)) {
+      alert("转账成功！");
+    } else {
+      alert("转账失败！");
+    }
   };
 
   /**
    * 进行账户注册
    * param
    */
-  $scope.registerAccount = function () {
-    //解锁账户
-    if (!unlockEtherAccount($scope.selectedAccount, $scope.password)) return;
-    //如果用户已经注册，返回
-    if (isTheUserAddressRegister($scope.selectedAccount)) {
-      alert("用户已注册！");
+  $scope.registerAccount = function (address, password, userName) {
+    if (!address || !password || !userName) {
+      alert("请输入完备信息!");
       return;
     }
     //判断用户名是否合法，若存在则返回
-    if (!$scope.isUserNameLegal()) {
+    if (!$scope.isRegisterUserNameLegal(address, userName)) {
       alert("用户姓名不合法");
       return;
     }
-    //判断账户是否小于0.1 ether
-    if (web3.fromWei(web3.eth.getBalance($scope.selectedAccount), 'ether') < 0.1) {
-      alert("余额不足！");
-      return;
-    }
-    //发送注册请求
-    try {
-      contractInstance.registerUser($scope.userName, {
-        from: $scope.selectedAccount,
-        gas: 80000000
-      });
-    } catch (err) {
-      console.log(err);
-    }
+    registerUser(address, password, userName);
   };
 
   /**
    * 判断用户名是否合法，包括是否已经存在及为空
    * @returns {boolean}
    */
-  $scope.isUserNameLegal = function () {
-    if (contractInstance.isUserNameExist.call($scope.userName)) {
-      $scope.nameError = "User name is exist";
+  $scope.isRegisterUserNameLegal = function (address, userName) {
+    if (!userName) {
+      $scope.nameError = "Please input user name.";
       return false;
     }
-    else {
-      if (!$scope.userName) {
-        $scope.nameError = "Please input user name.";
-        return false;
-      }
+    if (isUserAddressRegister(address)) {
+      $scope.nameError = "The user address has been registered";
+      return false;
+    }
+    if(isUserNameRegister(userName)){
+      $scope.nameError = "The user name has been registered";
+      return false;
     }
     $scope.nameError = "";
     return true;
@@ -138,11 +108,51 @@ angular.module("accounts", []).controller("accounts", function ($scope) {
 
 //账户相关通用函数
 /**
- * 获取所有账户
+ * 获取该节点账户
  * @returns {*}
  */
-function getAllAccounts() {
-  return web3.eth.accounts;
+function getNodeAccounts() {
+  var accounts = [];
+  var nodeAccounts = web3.eth.accounts;
+  for (var i = 0; i < nodeAccounts.length; i++) {
+    var account = [];
+    account.userName = getUserNameByAddress(nodeAccounts[i]);
+    account.address = nodeAccounts[i];
+    account.balance = getBalanceByAddress(nodeAccounts[i]);
+    accounts.push(account);
+  }
+  return accounts;
+}
+
+/**
+ * 获取节点所有已经注册的账户
+ * @returns {Array}
+ */
+function getNodeRegisterAccounts() {
+  var nodeAccounts = web3.eth.accounts;
+  var accounts = [];
+  //将已经注册的账户放入数组
+  for (var i = 0; i < nodeAccounts.length; i++) {
+    if (isUserAddressRegister(nodeAccounts[i])) {
+      accounts.push(nodeAccounts[i]);
+    }
+  }
+  return accounts;
+}
+
+/**
+ * 获取所有已经注册的用户名称数组
+ */
+function getRegisterAccounts() {
+  var accounts = [];
+  var accountsNumber = contractInstance.getUsersNumber.call();
+  for (var i = 0; i < accountsNumber; i++) {
+    var account = [];
+    account.userName = web3.toAscii(contractInstance.getUserNameByIndex.call(i));
+    account.address = getUserAddressByName(account.userName);
+    accounts.push(account);
+  }
+  return accounts;
 }
 
 /**
@@ -157,7 +167,7 @@ function unlockEtherAccount(accountAddress, password) {
     return true;
   } catch (err) {
     console.log(err);
-    alert("You haven't connect to ethereum or the password cannot match the account!");
+    alert("未连接到节点或者账户密码不正确");
     return false;
   }
 }
@@ -172,31 +182,13 @@ function isAddress(address) {
 }
 
 /**
- * 获取所有已经注册的用户
- */
-function getRegisterAccounts() {
-  var allUser = web3.eth.accounts;
-  registerAccounts = [];
-  //循环判断所有账户名称
-  for (var i = 0; i < allUser.length; i++) {
-    if (isTheUserAddressRegister(allUser[i])) {
-      var account = [];
-      account.address = allUser[i];
-      account.userName = getUserNameByAddress(account.address);
-      registerAccounts.push(account);
-    }
-  }
-  return registerAccounts;
-}
-
-/**
  * 根据地址返回用户名
  * @param accountAddress
  * @returns {string}
  */
 function getUserNameByAddress(accountAddress) {
   //判断用户是否存在
-  if (!isTheUserAddressRegister(accountAddress)) return "";
+  if (!isUserAddressRegister(accountAddress)) return "UnRegister User";
   //返回用户名
   return web3.toAscii(contractInstance.getUserNameByAddress.call(accountAddress));
 }
@@ -214,9 +206,126 @@ function getUserAddressByName(userName) {
  * @param address
  * @returns {boolean}
  */
-function isTheUserAddressRegister(address) {
+function isUserAddressRegister(address) {
   return contractInstance.isUserAddressExist.call(address);
 }
 
+/**
+ * 根据用户名称返回是否已经注册
+ * @param userName
+ */
+function isUserNameRegister(userName) {
+  return contractInstance.isUserNameExist.call(userName);
+}
 
+/**
+ * 根据账户地址，账户密码，用户名，进行账户注册
+ * @param address
+ * @param password
+ * @param userName
+ * @returns {boolean}
+ */
+function registerUser(address, password, userName) {
+  //判断账户是否已经注册
+  if (isUserAddressRegister(address)) {
+    alert("该账户已经注册！");
+    return false;
+  }
+  if (isUserNameRegister(userName)) {
+    alert("该账户名已被使用！");
+    return false;
+  }
+  //判断是否能够正确解锁
+  if (!unlockEtherAccount(address, password)) {
+    return false;
+  }
+  if (!isAccountHasEther(address, 1)) {
+    alert("账户没有足够余额！");
+    return false;
+  }
+  //调用合约进行注册
+  try {
+    contractInstance.registerUser(userName, {
+      from: address,
+      gas: 80000000
+    });
+    alert("注册成功！");
+  } catch (err) {
+    console.log(err);
+    alert("注册失败！");
+    return false;
+  }
+  return true;
+}
 
+/**
+ * 根据地址判断是否有足够的以太币
+ * @param address
+ * @param ether
+ * @returns {boolean}
+ */
+function isAccountHasEther(address, ether) {
+  //判断账户是否小于0.1 ether
+  if (getBalanceByAddress(address) < ether) {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * 获取对应账户以太币
+ * @param address
+ * @returns {String|Object|*}
+ */
+function getBalanceByAddress(address) {
+  if (!isAddress(address)) {
+    alert("地址不合法！");
+    return;
+  }
+  return web3.fromWei(web3.eth.getBalance(address), 'ether');
+}
+
+/**
+ * 创建新账户
+ * @param password
+ * @returns {*}
+ */
+function createAccount(password) {
+  if (!password) return null;
+  try {
+    web3.personal.newAccount(password);
+    var newAddress = web3.eth.accounts[web3.eth.accounts.length - 1]
+    alert("创建成功，账户地址为：" + newAddress);
+    return newAddress;
+  } catch (err) {
+    console.log(err);
+    alert("创建账户失败！");
+    return null;
+  }
+}
+
+/**
+ * 转账功能
+ * @param from
+ * @param to
+ * @param password
+ * @param ether
+ * @param data
+ * @returns {boolean}
+ */
+function chargeAccount(from, to, password, ether, data) {
+  if (!unlockEtherAccount(from, password)) {
+    return;
+  }
+  try {
+    web3.eth.sendTransaction({
+      from: from,
+      to: to,
+      value: web3.toWei(ether),
+      data: data
+    });
+  } catch (err) {
+    return false;
+  }
+  return true;
+}

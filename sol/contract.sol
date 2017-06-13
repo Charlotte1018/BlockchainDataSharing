@@ -570,7 +570,9 @@ contract UserRegister{
     //storage the relationship between address to name
     mapping(address => bytes32) public addressToName;
     mapping(bytes32 => address) public nameToAddress;
-
+    //userName list
+    bytes32[] public userNameList;
+    uint public usersNumber;
     /**
      * add user to list, if success, return true, else return false
      */
@@ -579,6 +581,8 @@ contract UserRegister{
         if(nameToAddress[userName] == initAddress && addressToName[userAddress] == initBytes32){
             nameToAddress[userName] = userAddress;
             addressToName[userAddress] = userName;
+            usersNumber++;
+            userNameList.push(userName);
             return true;
         }
         return false;
@@ -671,6 +675,19 @@ contract DataShareManagement{
          return userRegister.nameToAddress(userName);
      }
 
+     /**
+      * Get the user number
+      */
+      function getUsersNumber() returns(uint){
+          return userRegister.usersNumber();
+      }
+
+      /**
+       * Get userName by the index
+       */
+       function getUserNameByIndex(uint index) returns(bytes32){
+           return userRegister.userNameList(index);
+       }
      modifier isTheUserRegister(){
          if(!isUserAddressExist(msg.sender)) return;
          _;
