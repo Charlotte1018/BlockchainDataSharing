@@ -51,7 +51,7 @@ var web3 = new Web3(Web3.providers.givenProvider || new Web3.providers.HttpProvi
  * getTaskRequest(bytes32 taskName, address requester) —— 根据数据名称与请求者地址，返回请求地址(address)
  * endTask(bytes32 taskName) —— 根据任务名称结束任务，返回是否成功(bool)
  */
-var contractAddress = "0x8b021396feda36969BF945fCfEB638db9eFd94F5";
+var contractAddress = "0x6c3f81E3F2d16f62b132cc878101CCA8f9836f30";
 var abi = [{
     "constant": false,
     "inputs": [{"name": "taskName", "type": "bytes32"}, {"name": "requester", "type": "address"}],
@@ -840,8 +840,8 @@ angular
     'directiveModule'
   ])
   .config(function ($urlRouterProvider) {
-    $urlRouterProvider.when("/", "app/home");
-    $urlRouterProvider.otherwise('app/home');
+    $urlRouterProvider.when("/", "app/login");
+    $urlRouterProvider.otherwise('app/login');
   })
   .config(['$locationProvider', function ($locationProvider) {
     $locationProvider.html5Mode({

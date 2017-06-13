@@ -26,7 +26,7 @@
                                 <td><input type="checkbox" class="checkboxes" value="1" /></td>
                                 <td>{{taskSet.taskName}}</td>
                                 <td class="hidden-phone">
-                                    <p ng-repeat="type in taskSet.types" class="btn btn-round btn-danger">{{type.key}} : {{type.value}}</p>
+                                    <p ng-repeat="type in taskSet.types">{{type.key}} : {{type.value}}</p>
                                 </td>
                                 <td class="hidden-phone">{{taskSet.introduction}}</td>
                                 <td class="hidden-phone">{{taskSet.provider}}</td>
