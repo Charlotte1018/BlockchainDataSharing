@@ -127,7 +127,7 @@ angular.module('mainrouter', [
         views: {
           "content": {
             templateUrl: 'views/blockchain/provides/provideData.html',
-            controller: 'provide'
+            controller: 'provideData'
           }
         }
       })

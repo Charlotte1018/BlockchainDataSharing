@@ -786,6 +786,9 @@ var abiRequestObject = [{
   "type": "constructor"
 }];
 
+/**
+ * 全局变量
+ */
 //获取管理合约
 var contract = web3.eth.contract(abi);
 var contractInstance = contract.at(contractAddress);
@@ -799,9 +802,27 @@ var requestContract = web3.eth.contract(abiRequestObject);
 var accessType = ["Init", "Pending", "Reject", "Confirm"];
 //设置任务状态数组
 var taskStatus = ["Unfinished", "Finished"];
-//记录已经注册的用户
-var registerAccounts = [];
+//设置基本类型
+var tool_type = {
+  key: "Tool",
+  value: [
+    "802.1", "802.11 frames", "802.11a", "802.11b", "802.11g", "802.15", "802.15.4", "802.16",
+    "Bluetooth", "DTN", "GPS", "MANET", "Others", "ONE", "ORBIT", "RFID", "RFMON", "SNMP", "EventsReader",
+    "Wi-Fi hotspot", "WiBro", "WiMax", "auth log", "cell-network", "iMotes", "location", "packet trace",
+    "sensor network", "signal strength", "system-log", "tcp-dump", "vehicular network",
+    "wardriving", "WMN"
+  ]
+};
 
+var purpose_type = {
+  key: "Purpose",
+  value: [
+    "Bit Error", "Compute", "Content Eval",
+    "Educational", "Energy-effi", "Behavior", "Localization", "Location-aware",
+    "MAC Protocol", "Motion Detect", "Net-Diagnosis", "Net Analysis", "Net Security",
+    "Network Sim", "Others", "Opp Connect", "Positioning", "Routing", "Social", "User Mobility"
+  ]
+};
 
 /**
  * 返回对应数据是否已经被确认或者拒绝
@@ -852,7 +873,13 @@ angular
   }]);
 angular.module('config', [])
   .controller('config', function ($scope) {
-    getConfig();
+    /**
+     * 页面加载完后操作
+     */
+    $scope.$watch('$viewContentLoaded', function () {
+      getConfig();
+    });
+
     /**
      * 更新系统设置
      */
@@ -932,9 +959,37 @@ function switchToManager(password) {
   }
 }
 
+/**
+ * 切换为用户
+ */
 function switchToUser() {
   auth = false;
   alert("用户身份切换成功");
 };
 
+/**
+ * 获取工具类型数组
+ * @returns {[*]}
+ */
+function getToolType() {
+  return tool_type;
+}
 
+/**
+ * 获取目的类型数组
+ * @returns {[*]}
+ */
+function getPurposeType() {
+  return purpose_type;
+}
+
+/**
+ * 返回字符串长度是否超出
+ * @param name
+ * @param length
+ * @returns {boolean}
+ */
+function isNameLengthLegal(name, length) {
+  if (!name || !length) return false;
+  return web3.fromAscii(name).length <= length;
+}

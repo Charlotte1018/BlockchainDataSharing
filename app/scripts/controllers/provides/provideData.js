@@ -1,68 +1,81 @@
-
-angular.module("provide", []).controller("provide", function ($scope) {
+angular.module("provide", []).controller("provideData", function ($scope) {
   //账户部分初始化
   //初始取出账户
-  $scope.accounts = getRegisterAccounts();
-  $scope.types = [{key: "", value: ""}];
-  $scope.dataSets = [];
+  $scope.tool_type = getToolType();
+  $scope.purpose_type = getPurposeType();
+  $scope.types = [];
+
   /**
    * 页面加载完后自动显示第一个用户名
    */
   $scope.$watch('$viewContentLoaded', function () {
-    if ($scope.accounts.length > 0) {
-      $scope.selectedAccount = $scope.accounts[0].userName;
-    }
   });
+
   /**
    * 创建数据
    */
-  /**
-   * 创建数据
-   */
-  $scope.provideData = function () {
-    //检查是否都有值
-    if (!$scope.dataName) {
-      alert("The data name must be filled!");
+  $scope.provideData = function (address, password, dataName, introduction, capability, cap_pwd, select_tool_type, select_purpose_type) {
+    alert(web3.toHex(select_tool_type));
+    return
+    if (!address || !password || !dataName || !introduction || !capability || !cap_pwd
+      || !select_tool_type || !select_purpose_type) {
+      alert("请填写完善信息！");
       return;
     }
+    if (!isNameLengthLegal(dataName, 32) || !isNameLengthLegal(cap_pwd, 32) ||
+      !isNameLengthLegal(select_tool_type, 32) || !isNameLengthLegal(select_purpose_type, 32)) {
+      alert("数据名称、权限密码、类型相关字段不能超过15个字符！");
+      return;
+    }
+
+    if (isDataNameExist(dataName)) {
+      alert("数据名称已注册!");
+      return;
+    }
+    //判断是否增加type并判断是否超过长度
     for (var i = 0; i < $scope.types.length; i++) {
       if (!$scope.types[i].key || !$scope.types[i].value) {
         alert("Please input the types params!");
         return;
       }
+      if (!isNameLengthLegal($scope.types[i].key) || !isNameLengthLegal($scope.types[i].value)) {
+        alert("类型相关字段不能超过15个字符！");
+        return;
+      }
     }
-    if (!$scope.introduction) {
-      alert("Please input the introduction!");
+    //解锁
+    if (!unlockEtherAccount(address, password)) {
       return;
     }
-    if (!$scope.password) {
-      alert("Please input the password!");
-      return;
-    }
-    //检查数据名称是否存在
-    if (contractInstance.isDataNameExist.call($scope.dataName)) {
-      alert("The data name exist");
-      return;
-    }
-    //解锁账户
-    if (!unlockEtherAccount(getUserAddressByName($scope.selectedAccount), $scope.password)) return;
     //添加数据
     try {
       //添加数据源
-      contractInstance.createData($scope.dataName, $scope.introduction, {
-        from: getUserAddressByName($scope.selectedAccount),
+      contractInstance.createData(dataName, introduction, capability, cap_pwd, {
+        from: address,
         gas: 80000000
       });
+      alert($scope.tool_type.key + select_tool_type + dataName);
       //添加数据类型
-      for (var i = 0; i < $scope.types.length; i++) {
-        contractInstance.addTypeToData($scope.types[i].key, $scope.types[i].value, $scope.dataName, {
-          from: getUserAddressByName($scope.selectedAccount),
-          gas: 80000000
+      contractInstance.addTypeToData($scope.tool_type.key, select_tool_type, dataName, {
+        from: address,
+        gas: 8000000
+      });
+      contractInstance.addTypeToData($scope.purpose_type.key, select_purpose_type, dataName, {
+        from: address,
+        gas: 8000000
+      });
+      for (i = 0; i < $scope.types.length; i++) {
+        contractInstance.addTypeToData($scope.types[i].key, $scope.types[i].value, dataName, {
+          from: address,
+          gas: 8000000
         });
       }
+      alert("新增数据成功！");
+      return true;
     } catch (err) {
-      alert(err);
-      return;
+      console.log(err);
+      alert("新增数据失败!");
+      return false;
     }
   };
 
@@ -72,29 +85,30 @@ angular.module("provide", []).controller("provide", function ($scope) {
   $scope.addType = function () {
     $scope.types.push({key: "", value: ""});
   };
+
   /**
    * 删除类型控件
    */
   $scope.removeType = function () {
-    if ($scope.types.length <= 1) {
-      alert("Must have one type");
+    if ($scope.types.length <= 0) {
       return;
     }
     $scope.types.splice($scope.types.length - 1, 1);
   };
+
   /**
    * 检查数据名称是否存在
    */
-  $scope.checkDataNameExist = function () {
-    if (contractInstance.isDataNameExist.call($scope.dataName)) {
+  $scope.checkDataNameExist = function (dataName) {
+    if (!dataName) {
+      $scope.nameError = "Please input data name.";
+      return;
+    }
+    if (isDataNameExist(dataName)) {
       $scope.nameError = "The name is exist";
+      return;
     }
-    else {
-      if (!$scope.dataName) {
-        $scope.nameError = "Please input data name.";
-      }
-      else $scope.nameError = "";
-    }
+    $scope.nameError = "";
   };
 
   /**

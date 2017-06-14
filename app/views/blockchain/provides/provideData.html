@@ -14,7 +14,9 @@
                 <div class="form-group">
                   <label class="col-lg-2 control-label">Provider:</label>
                   <div class="col-lg-10">
-                    <select class="form-control"  ng-model="selectedAccount" ng-options="account.userName as account.userName for account in accounts ">
+                    <select class="form-control" ng-model="selectedAccount"
+                            ng-init="selectedAccount = nodeRegisterAccounts[0]"
+                            ng-options="account.userName for account in nodeRegisterAccounts ">
                     </select>
                   </div>
                 </div>
@@ -27,13 +29,48 @@
                 <div class="form-group">
                   <label class="col-lg-2 control-label">Data Name</label>
                   <div class="col-lg-10">
-                    <input type="text" class="form-control" placeholder="Data Name" ng-model="dataName" ng-change="checkDataNameExist()">
+                    <input type="text" class="form-control" placeholder="Data Name" ng-model="dataName"
+                           ng-change="checkDataNameExist(dataName)">
+                    <p>{{nameError}}</p>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-lg-2 control-label">Introduction</label>
                   <div class="col-lg-10">
-                    <textarea type="text" cols="60" rows="5" class="form-control" placeholder="Introduction" ng-model="introduction"></textarea>
+                    <textarea type="text" cols="60" rows="5" class="form-control" placeholder="Introduction"
+                              ng-model="introduction"></textarea>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-lg-2 control-label">Capability</label>
+                  <div class="col-lg-10">
+                    <input type="text" class="form-control" placeholder="Capability" ng-model="capability">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-lg-2 control-label">Data Control Key</label>
+                  <div class="col-lg-10">
+                    <input type="text" class="form-control" placeholder="Data Control Key" ng-model="cap_pwd">
+                  </div>
+                </div>
+                <div>
+                  <div class="form-group">
+                    <label class="col-lg-2 control-label">{{tool_type.key}}</label>
+                    <div class="col-lg-10">
+                      <select class="form-control" ng-model="selectedTool"
+                              ng-init="selectedTool = tool_type.value[0]"
+                              ng-options="tool for tool in tool_type.value ">
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-lg-2 control-label">{{purpose_type.key}}</label>
+                    <div class="col-lg-10">
+                      <select class="form-control" ng-model="selectedPurpose"
+                              ng-init="selectedPurpose = purpose_type.value[0]"
+                              ng-options="purpose for purpose in purpose_type.value ">
+                      </select>
+                    </div>
                   </div>
                 </div>
                 <div ng-repeat="type in types">
@@ -43,7 +80,7 @@
                       <input type="text" class="form-control" placeholder="Key" ng-model="type.key">
                     </div>
                   </div>
-                  <div class="form-group" >
+                  <div class="form-group">
                     <label class="col-lg-2 control-label">Type Value {{$index+1}}:</label>
                     <div class="col-lg-10">
                       <input type="text" class="form-control" placeholder="value" ng-model="type.value">
@@ -51,18 +88,20 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <div class="col-lg-offset-2 col-lg-10">
-                    <button type="submit" class="btn btn-danger col-lg-2" ng-click="addType()">Add Type </button>
+                  <div class="col-lg-offset-2 col-lg-3">
+                    <button type="submit" class="btn btn-success col-lg-12" ng-click="addType()">Add Type</button>
+                  </div>
+                  <div class="col-lg-offset-1 col-lg-3">
+                    <button type="submit" class="btn btn-danger col-lg-12" ng-click="removeType()">Remove Type</button>
                   </div>
                 </div>
                 <div class="form-group">
-                  <div class="col-lg-offset-2 col-lg-10">
-                    <button type="submit" class="btn btn-danger col-lg-2" ng-click="removeType()">Remove Type </button>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-lg-offset-2 col-lg-10">
-                    <button type="submit" class="btn btn-danger col-lg-2" ng-click="provideData()">Provide Data</button>
+                  <div class="col-lg-offset-2 col-lg-3">
+                    <button type="submit" class="btn btn-danger col-lg-12"
+                            ng-click="provideData(selectedAccount.address, password, dataName, introduction, capability, cap_pwd, selectedTool,selectedPurpose)">
+                      Provide
+                      Data
+                    </button>
                   </div>
                 </div>
               </fieldset>

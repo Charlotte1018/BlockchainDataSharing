@@ -1,8 +1,8 @@
 'use strict';
 angular.module("provideTask", []).controller("provideTask", function ($scope) {
-  //账户部分初始化
-  //初始取出已注册的账户
-  $scope.accounts = getRegisterAccounts();
+  //数据类型初始化
+  $scope.tool_type = getToolType();
+  console.log($scope.tool_type);
   $scope.types = [{key: "", value: ""}];
   $scope.taskSets = [];
   $scope.nameError = "";
@@ -77,8 +77,7 @@ angular.module("provideTask", []).controller("provideTask", function ($scope) {
    * 删除类型控件
    */
   $scope.removeType = function () {
-    if ($scope.types.length <= 1) {
-      alert("Must have one type");
+    if ($scope.types.length <= 0) {
       return;
     }
     $scope.types.splice($scope.types.length - 1, 1);

@@ -9,14 +9,8 @@ angular.module("accounts", []).controller("accounts", function ($scope) {
    * 页面加载完后自动显示第一个用户名
    */
   $scope.$watch('$viewContentLoaded', function () {
-    // if ($scope.accounts.length > 0) {
-    //     $scope.selectedAccount = $scope.registerAccounts[0].userName;
-    // }
-    //初始账户余额
-    if ($scope.registerAccounts != null && $scope.registerAccounts.length > 0) {
-      //$scope.balance = web3.eth.getBalance(getUserAddressByName($scope.selectedAccount));
-      //$scope.balance = web3.fromWei($scope.balance, 'ether');
-    }
+    //更新配置
+    $scope.auth = auth;
   });
   /**
    * 更新注册账户列表
@@ -142,7 +136,11 @@ function getNodeRegisterAccounts() {
   //将已经注册的账户放入数组
   for (var i = 0; i < nodeAccounts.length; i++) {
     if (isUserAddressRegister(nodeAccounts[i])) {
-      accounts.push(nodeAccounts[i]);
+      var account = [];
+      account.userName = getUserNameByAddress(nodeAccounts[i]);
+      account.address = nodeAccounts[i];
+      account.balance = getBalanceByAddress(nodeAccounts[i]);
+      accounts.push(account);
     }
   }
   return accounts;
@@ -252,6 +250,9 @@ function registerUser(address, password, userName) {
   if (!isAccountHasEther(address, 1)) {
     alert("账户没有足够余额！");
     return false;
+  }
+  if(!isNameLengthLegal(userName,32)){
+    alert("英文名字长度应该小于15位");
   }
   //调用合约进行注册
   try {
