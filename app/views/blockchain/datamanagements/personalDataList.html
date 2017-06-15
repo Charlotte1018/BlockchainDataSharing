@@ -1,4 +1,5 @@
 <body>
+
 <section class="profile-nav alt green-border ">
   <section class="wrapper ">
     <div>
@@ -21,7 +22,9 @@
             </div>
             <div class="form-group">
               <div class="col-lg-offset-2 col-lg-10">
-                <button type="submit" class="btn btn-danger col-lg-2" ng-click="refresh(selectedAccount.address)">Search</button>
+                <button type="submit" class="btn btn-danger col-lg-2" ng-click="refresh(selectedAccount.address)">
+                  Search
+                </button>
               </div>
             </div>
           </form>
@@ -31,7 +34,7 @@
         <header class="panel-heading">
           Provide Data List
         </header>
-        <header class="panel-heading"> You have provided {{provideSum}} data.</header>
+        <p class="panel-heading"> You have provided {{provideSum}} data.</p>
         <table class="table table-striped border-top">
           <thead>
           <tr>
@@ -59,7 +62,14 @@
         <header class="panel-heading">
           Request Data List
         </header>
-        <header class="panel-heading"> You have requested {{requestSum}} data.</header>
+        <p class="panel-heading">
+          <label class="col-lg-4"> You have requested {{requestSum}} data.</label>
+          <label class="col-lg-offset-2 col-lg-2">Request Ticket</label>
+          <input type="text" class="col-lg-4"
+                 placeholder="Request Ticket"
+                 ng-model="requestT">
+        <hr/>
+        </p>
         <table class="table table-striped border-top">
           <thead>
           <tr>
@@ -67,7 +77,7 @@
             <th>Data Name</th>
             <th class="hidden-phone">Provider</th>
             <th class="hidden-phone">Request Status</th>
-            <!--<th class="hidden-phone"></th>-->
+            <th class="hidden-phone">Access Data(Get Capability)</th>
           </tr>
           </thead>
           <tbody>
@@ -76,13 +86,16 @@
             <td>{{data.dataName}}</td>
             <td class="hidden-phone">{{data.provider}}</td>
             <td class="hidden-phone">{{data.status}}</td>
+            <td class="hidden-phone">
+              <button class="btn btn-success" ng-show="{{data.accessable}}"
+                      ng-click="getCapability(data.dataName, requestT, selectedAccount.address)">Access Data
+              </button>
+            </td>
           </tr>
           </tbody>
         </table>
         <header class="panel-heading"></header>
       </section>
-
-
     </div>
   </section>
 </section>

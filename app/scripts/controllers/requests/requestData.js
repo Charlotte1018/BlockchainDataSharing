@@ -175,6 +175,12 @@ function getRequestDataByName(dataName, requester) {
     if (data.status == accessType[0]) {
       return [];
     }
+    //如果通过审核，设置为可以访问
+    if (data.status == accessType[3]) {
+      data.accessable = true;
+    } else {
+      data.accessable = false;
+    }
     //获取当前请求备注信息
     var requestContractInstance = requestContract.at(contractInstance.getDataRequest.call(dataName, requester));
     data.information = requestContractInstance.information();
