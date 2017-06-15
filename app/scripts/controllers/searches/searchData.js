@@ -1,9 +1,5 @@
 angular.module("searches", [])
   .controller("searchData", function ($scope) {
-    //初始化
-    $scope.tool_type = getToolType();
-    $scope.purpose_type = getPurposeType();
-
     /**
      * 根据名字搜索数据详细信息
      */
@@ -15,7 +11,7 @@ angular.module("searches", [])
      * 根据类型搜索数据
      */
     $scope.searchDataByType = function (type_key, type_value) {
-      $scope.dataSet = searchDataByType(type_key, type_value);
+      $scope.dataSet = searchDataByType()
     };
   });
 
@@ -74,7 +70,7 @@ function searchDataByType(type_key, type_value) {
   }
   try {
     //获取类型对象合约
-    var typeAddress = contractInstance.getTypeAddressByName.call(formatBytes(type_key), formatBytes(type_value));
+    var typeAddress = contractInstance.getTypeAddressByName.call(type_key, type_value);
     var typeObjectInstance = typeContract.at(typeAddress);
     var dataNum = typeObjectInstance.dataNum().toNumber();
     if (dataNum == 0) {

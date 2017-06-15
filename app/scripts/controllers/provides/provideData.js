@@ -1,4 +1,4 @@
-angular.module("provide", []).controller("provideData", function ($scope) {
+angular.module("provideData", []).controller("provideData", function ($scope) {
   //初始化
   $scope.tool_type = getToolType();
   $scope.purpose_type = getPurposeType();
@@ -138,7 +138,7 @@ function getProvideDataList(provider) {
     for (var i = 0; i < provideNum; i++) {
       var data = [];
       data.dataName = web3.toAscii(contractInstance.getProvideDataNameByIndex.call(provider, i));
-      data = searchDataByName(data.dataName);
+      data = getProvideData(data.dataName);
       dataSet.push(data);
     }
   } catch (err) {
@@ -146,4 +146,18 @@ function getProvideDataList(provider) {
     return [];
   }
   return dataSet;
+}
+
+function getProvideData(dataName) {
+  var data = searchDataByName(dataName);
+  try {
+    //获取对应名称的权限合约
+    var accessContractInstance = accessContract.at(contractInstance.getDataAccessByName.call(dataName));
+    data.requestNumber = accessContractInstance.requesterNum();
+  }
+  catch (err) {
+    console.log(err);
+    return [];
+  }
+  return data;
 }

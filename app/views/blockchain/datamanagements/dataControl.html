@@ -1,5 +1,5 @@
 <body>
-<section class="profile-nav alt green-border " ng-show="accounts.length > 0">
+<section class="profile-nav alt green-border ">
   <section class="wrapper ">
     <!-- page start-->
     <div class="row col-lg-10 col-lg-offset-1">
@@ -14,15 +14,20 @@
                 <div class="form-group">
                   <label class="col-lg-2 control-label">Provider:</label>
                   <div class="col-lg-10">
-                    <select class="form-control" ng-change="getProvideData()"  ng-model="selectedAccount"
-                            ng-options="account.userName as account.userName for account in accounts">
+                    <select class="form-control" ng-change="getProvideData(selectedAccount.address)"
+                            ng-model="selectedAccount"
+                            ng-init="selectedAccount = nodeRegisterAccounts[0]"
+                            ng-options="account.userName for account in nodeRegisterAccounts">
                     </select>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-lg-2 control-label">Data Name:</label>
                   <div class="col-lg-10">
-                    <select class="form-control" ng-model="selectedData" ng-options="data.dataName as data.dataName for data in dataSets " ng-change="getDataRequestList()">
+                    <select class="form-control" ng-model="selectedData"
+                            ng-init="selectedData = dataSet[0]"
+                            ng-options="data.dataName for data in dataSet "
+                            ng-change="getDataRequestList(selectedData.dataName)">
                     </select>
                   </div>
                 </div>
@@ -37,24 +42,33 @@
                   <table class="table table-striped border-top">
                     <thead>
                     <tr>
-                      <th style="width:8px;"><input type="checkbox" class="group-checkable" /></th>
+                      <th style="width:8px;"><input type="checkbox" class="group-checkable"/></th>
                       <th>Requester</th>
+                      <th class="hidden-phone">Remarks</th>
                       <th class="hidden-phone">Status</th>
                       <th class="hidden-phone">Confirm</th>
                       <th class="hidden-phone">Reject</th>
-                      <th class="hidden-phone">Refresh</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="odd gradeX" ng-repeat="requester in requesters" render-finish>
-                      <td><input type="checkbox" class="checkboxes" value="1" /></td>
-                      <td>{{requester.userName}}</td>
-                      <!--<td class="hidden-phone">{{data.provider}}</td>-->
-                      <td class="hidden-phone">{{requester.status}}</td>
+                    <tr class="odd gradeX" ng-repeat="request in requestList" render-finish>
+                      <td><input type="checkbox" class="checkboxes" value="1"/></td>
+                      <td>{{request.requesterName}}</td>
+                      <td class="hidden-phone">{{request.information}}</td>
+                      <td class="hidden-phone">{{request.status}}</td>
 
-                      <td class="hidden-phone"><button class="btn btn-success btn-xs" ng-click="confirmData(selectedData,requester.address)">Confirm</button></td>
-                      <td class="hidden-phone"><button class="btn btn-danger btn-xs" ng-click="rejectData(selectedData,requester.address)">Reject</button></td>
-                      <td class="hidden-phone"><button class="btn btn-danger btn-xs" ng-click="refresh()">Refresh</button></td>
+                      <td class="hidden-phone">
+                        <button class="btn btn-success btn-xs"
+                                ng-click="confirmData(selectedAccount.address, password, selectedData.dataName,request.requester)">
+                          Confirm
+                        </button>
+                      </td>
+                      <td class="hidden-phone">
+                        <button class="btn btn-danger btn-xs"
+                                ng-click="rejectData(selectedAccount.address, password, selectedData.dataName,request.requester)">
+                          Reject
+                        </button>
+                      </td>
                     </tr>
                     </tbody>
                   </table>

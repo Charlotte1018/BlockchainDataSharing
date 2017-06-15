@@ -1,9 +1,6 @@
 angular.module("request", []).controller("requestData", function ($scope) {
-  $scope.updateDisabled = true;
-  $scope.information = "";
-
   /**
-   * 页面加载完后自动显示第一个用户名
+   * 页面加载完后
    */
   $scope.$watch('$viewContentLoaded', function () {
   });
@@ -44,57 +41,33 @@ angular.module("request", []).controller("requestData", function ($scope) {
   /**
    * 更新请求备注
    */
-  $scope.updateInfo = function () {
-    if (!$scope.dataName || !$scope.information) {
-      alert("请输入数据名称或备注");
+  $scope.updateInfo = function (dataName, requester, password, information) {
+    if (!dataName || !requester || !password || !information) {
+      alert("请完备信息！");
       return;
     }
-    if (!$scope.isDataExist()) {
-      alert("数据名称不存在");
+    if (!isNameLengthLegal(dataName)) {
+      alert("数据名称长度不能超过32字符！");
       return;
     }
-    //解锁账户
-    if (!unlockEtherAccount(getUserAddressByName($scope.selectedAccount), $scope.password)) return;
 
-    //发送修改请求
-    try {
-      contractInstance.changeDataRequestInfo($scope.dataName, $scope.information, {
-        from: getUserAddressByName($scope.selectedAccount),
-        gas: 80000000
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  /**
-   * 判断更新备注是否合法
-   */
-  $scope.isUpdateLegal = function () {
-    //判断数据是否存在
-    if (!$scope.dataName || !$scope.isDataExist()) {
-      $scope.updateDisabled = true;
-      $scope.nameError = "数据不存在";
+    if (!isDataNameExist(dataName)) {
+      alert("数据名不存在！");
       return;
     }
-    $scope.nameError = "";
-    //判断输入的请求备注是否合法
-    if (!$scope.information) {
-      $scope.updateDisabled = true;
-      $scope.infoError = "请输入备注";
+    if (!isRequested(dataName, requester)) {
+      alert("尚未请求该数据！");
       return;
     }
-    $scope.infoError = "";
-
-    //判断数据是否已经被确认或者拒绝
-    if (isDataAudited($scope.dataName, getUserAddressByName($scope.selectedAccount))) {
-      $scope.infoError = "该数据已被审核，无法修改！";
-      $scope.updateDisabled = true;
+    if (isDataAudited(dataName, requester)) {
+      alert("数据尚已被审核，不可修改！");
       return;
-
     }
-    $scope.infoError = "";
-    $scope.updateDisabled = false;
+    if (updateInformation(dataName, requester, password, information)) {
+      alert("更新成功！");
+      return;
+    }
+    alert("更新失败！");
   };
 });
 
@@ -193,6 +166,9 @@ function getRequestDataByName(dataName, requester) {
     data = searchDataByName(dataName);
     //获取对应名称的权限合约
     var accessContractInstance = accessContract.at(contractInstance.getDataAccessByName.call(dataName));
+    data.requesterName = getUserNameByAddress(requester);
+    data.requester = requester;
+    data.requestNumber = accessContractInstance.requesterNum();
     //获取当前状态
     data.status = accessType[accessContractInstance.accessList(accessContractInstance.requestList(requester))];
     //如果没有请求过，返回空
@@ -247,6 +223,32 @@ function isDataAudited(dataName, requester) {
  * @param information
  * @returns {boolean}
  */
-function updateInformation(dataName, requester, password, information){
+function updateInformation(dataName, requester, password, information) {
+  if (!dataName || !requester || !password || !information || !isNameLengthLegal(dataName)) {
+    return false;
+  }
+  if (!isDataNameExist(dataName)) {
+    return false;
+  }
+  if (!isRequested(dataName, requester)) {
+    return false;
+  }
+  if (isDataAudited(dataName, requester)) {
+    return false;
+  }
+
+  try {
+    //解锁账户
+    if (!unlockEtherAccount(requester, password)) {
+      return false;
+    }
+    contractInstance.changeDataRequestInfo(dataName, information, {
+      from: requester,
+      gas: 80000000
+    });
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
   return true;
 }

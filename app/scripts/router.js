@@ -2,9 +2,10 @@
 angular.module('mainrouter', [
   'ctrlModule',
   'accounts',
-  'datamanagements',
+  'dataManagement',
+  'dataControl',
   'datamanagementstask',
-  'provide',
+  'provideData',
   'provideTask',
   'request',
   'requestTask',
@@ -105,11 +106,11 @@ angular.module('mainrouter', [
         }
       })
       .state('app.personalDataControl', {
-        url: '/personalDataControl',
+        url: '/dataControl',
         views: {
           "content": {
-            templateUrl: 'views/blockchain/datamanagements/provideDataControl.html',
-            controller: 'provideCtrl'
+            templateUrl: 'views/blockchain/datamanagements/dataControl.html',
+            controller: 'dataControl'
           }
         }
       })
@@ -258,6 +259,4 @@ angular.module('mainrouter', [
           }
         }
       });
-
-
   });

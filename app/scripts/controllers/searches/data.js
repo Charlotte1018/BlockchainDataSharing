@@ -14,6 +14,9 @@ angular.module("data", [])
  * @returns {boolean}
  */
 function isDataNameExist(dataName) {
+  if (!dataName || !isNameLengthLegal(dataName)) {
+    return false;
+  }
   try {
     if (contractInstance.isDataNameExist.call(dataName)) {
       return true;
