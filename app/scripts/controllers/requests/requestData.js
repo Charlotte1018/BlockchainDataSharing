@@ -1,4 +1,4 @@
-angular.module("request", []).controller("requestData", function ($scope) {
+angular.module("requestData", []).controller("requestData", function ($scope) {
   /**
    * 页面加载完后
    */

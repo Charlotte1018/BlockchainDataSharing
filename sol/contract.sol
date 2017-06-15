@@ -530,10 +530,10 @@ contract AccessManagement{
    /**
     * Create data access object
     */
-    function createTaskAccess(bytes32 taskName, address provider) returns(bool){
+    function createTaskAccess(bytes32 taskName, address provider, string capability, bytes32 cap_pwd) returns(bool){
         if(isTaskAccessExist(taskName)) return false;
         //create the task access object
-        taskAccessList[taskName] = new DataAccessObject(provider, msg.sender,"","");
+        taskAccessList[taskName] = new DataAccessObject(provider, msg.sender, capability, cap_pwd);
         provideTaskList[provider].push(taskName);
         provideTaskNum[provider]++;
         return true;
@@ -708,12 +708,12 @@ contract DataShareManagement{
      /**
       * create task and return the task object address
       */
-     function createTask(bytes32 taNa, string intro) isTheUserRegister returns(address){
+     function createTask(bytes32 taNa, string intro, string cap, bytes32 cap_pwd) isTheUserRegister returns(address){
          //create task object
          address taskObject = dataRegister.addTask(taNa, intro, msg.sender);
          if(taskObject == initAddress) return;
          //init the access control
-         accessManagement.createTaskAccess(taNa, msg.sender);
+         accessManagement.createTaskAccess(taNa, msg.sender, cap, cap_pwd);
          //return the task address
          return taskObject;
      }
@@ -922,13 +922,13 @@ contract DataShareManagement{
           /**
            * Request the task by name
            */
-          function requestTask(bytes32 taskName, string information) isTheUserRegister returns(bool){
+          function requestTask(bytes32 taskName, bytes32 requestT, string information) isTheUserRegister returns(bool){
               if(!isTaskNameExist(taskName)) return false;
               if(isTaskFinished(taskName)) return false;
               //Add to request task list
               accessManagement.requestTaskAccess(taskName, msg.sender);
               DataAccessObject accessObject = (DataAccessObject)(getTaskAccessByName(taskName));
-              if(accessObject.addRequest(msg.sender, "", information)) return true;
+              if(accessObject.addRequest(msg.sender, requestT, information)) return true;
               else return false;
           }
 

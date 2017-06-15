@@ -45,8 +45,8 @@ angular.module("provideTask", []).controller("provideTask", function ($scope) {
     }
     //添加任务
     try {
-      //添加任务源
-      contractInstance.createTask(formatBytes(taskName), introduction, {
+      //添加任务源(两个参数待定)
+      contractInstance.createTask(formatBytes(taskName), introduction, "test", "test", {
         from: address,
         gas: 80000000
       });

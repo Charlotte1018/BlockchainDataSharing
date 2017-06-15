@@ -4,12 +4,14 @@ angular.module('mainrouter', [
   'accounts',
   'dataManagement',
   'dataControl',
+  'taskControl',
+  'personalTask',
   'datamanagementstask',
   'provideData',
   'provideTask',
-  'request',
+  'requestData',
   'requestTask',
-  'searches',
+  'searchData',
   'searchTask',
   'login',
   'config',
@@ -118,8 +120,8 @@ angular.module('mainrouter', [
         url: '/personalTaskControl',
         views: {
           "content": {
-            templateUrl: 'views/blockchain/management/provideTaskControl.html',
-            controller: 'provideCtrlTask'
+            templateUrl: 'views/blockchain/management/taskControl.html',
+            controller: 'taskControl'
           }
         }
       })

@@ -20,7 +20,7 @@ var auth = true;
  * getUsersNumber() —— 返回用户数量(uint)
  * getUserNameByIndex(uint index) —— 根据下标返回用户名称
  * createData(bytes32 daNa, string intro, string cap, bytes32 cap_pwd) —— 根据用户名、介绍、权限、权限密码创建数据，返回数据对象地址(address)
- * createTask(bytes32 taNa, string intro) —— 根据用户名和介绍创建任务，返回任务对象地址(address)
+ * createTask(bytes32 taNa, string intro, string cap, bytes32 cap_pwd) —— 根据用户名和介绍创建任务，返回任务对象地址(address)
  * isDataNameExist(bytes32 daNa) —— 根据数据名，返回是否存在(bool)
  * isTaskNameExist(bytes32 daNa) —— 根据任务名，返回是否存在(bool)
  * addTypeToData(bytes32 type_key, bytes32 type_value, bytes32 dataName) —— 根据类型名，类型值和数据名称，向数据中添加类型
@@ -46,7 +46,7 @@ var auth = true;
  * getRequestDataNameByIndex(address requester, uint index) —— 根据请求者地址和下标，获取请求的数据名称(bytes32)
  * getRequestTaskNameByIndex(address requester, uint index) —— 根据请求者地址和下标，获取请求的任务名称(bytes32)
  * requestData(bytes32 dataName, bytes32 requestT, string information) —— 根据数据名称、请求密码对数据发起请求，并携带备注信息，返回是否成功(bool)
- * requestTask(bytes32 taskName, string information) —— 根据任务名称对任务发起请求，并携带备注信息，返回是否成功(bool)
+ * requestTask(bytes32 taskName, bytes32 requestT, string information) —— 根据任务名称对任务发起请求，并携带备注信息，返回是否成功(bool)
  * rejectData(bytes32 dataName, address requester) —— 根据地址和数据名称，拒绝数据请求
  * rejectTask(bytes32 taskName, address requester) —— 根据地址和任务名称，拒绝任务请求
  * confirmData(bytes32 dataName, address requester) —— 根据地址和数据名称，确认数据请求
@@ -58,7 +58,7 @@ var auth = true;
  * endTask(bytes32 taskName) —— 根据任务名称结束任务，返回是否成功(bool)
  * setDataCapability(bytes32 dataName, bytes32 cap_pwd, string cap) —— 根据数据名称、权限密码和新权限字段设置权限，返回是否成功(bool)
  */
-var contractAddress = "0x2fB91F8C6c1C6b2F13B1403CE244778B10f12a8B";
+var contractAddress = "0x8ad80Ab9Cd6ee07f1d7eC075775A6775c12C89AF";
 var abi = [{
   "constant": false,
   "inputs": [{"name": "taskName", "type": "bytes32"}, {"name": "requester", "type": "address"}],
@@ -78,13 +78,6 @@ var abi = [{
   "inputs": [{"name": "dataName", "type": "bytes32"}, {"name": "requester", "type": "address"}],
   "name": "getDataRequest",
   "outputs": [{"name": "", "type": "address"}],
-  "payable": false,
-  "type": "function"
-}, {
-  "constant": false,
-  "inputs": [{"name": "taskName", "type": "bytes32"}, {"name": "information", "type": "string"}],
-  "name": "requestTask",
-  "outputs": [{"name": "", "type": "bool"}],
   "payable": false,
   "type": "function"
 }, {
@@ -188,13 +181,6 @@ var abi = [{
   "constant": false,
   "inputs": [{"name": "taskName", "type": "bytes32"}],
   "name": "getTaskAddressByTaskName",
-  "outputs": [{"name": "", "type": "address"}],
-  "payable": false,
-  "type": "function"
-}, {
-  "constant": false,
-  "inputs": [{"name": "taNa", "type": "bytes32"}, {"name": "intro", "type": "string"}],
-  "name": "createTask",
   "outputs": [{"name": "", "type": "address"}],
   "payable": false,
   "type": "function"
@@ -329,6 +315,16 @@ var abi = [{
   "type": "function"
 }, {
   "constant": false,
+  "inputs": [{"name": "taskName", "type": "bytes32"}, {"name": "requestT", "type": "bytes32"}, {
+    "name": "information",
+    "type": "string"
+  }],
+  "name": "requestTask",
+  "outputs": [{"name": "", "type": "bool"}],
+  "payable": false,
+  "type": "function"
+}, {
+  "constant": false,
   "inputs": [{"name": "dataName", "type": "bytes32"}, {"name": "cap_pwd", "type": "bytes32"}, {
     "name": "cap",
     "type": "string"
@@ -400,6 +396,16 @@ var abi = [{
   "constant": false,
   "inputs": [{"name": "index", "type": "uint256"}],
   "name": "getDataAddressByIndex",
+  "outputs": [{"name": "", "type": "address"}],
+  "payable": false,
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{"name": "taNa", "type": "bytes32"}, {"name": "intro", "type": "string"}, {
+    "name": "cap",
+    "type": "string"
+  }, {"name": "cap_pwd", "type": "bytes32"}],
+  "name": "createTask",
   "outputs": [{"name": "", "type": "address"}],
   "payable": false,
   "type": "function"

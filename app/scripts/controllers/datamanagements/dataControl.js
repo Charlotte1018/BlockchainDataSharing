@@ -7,6 +7,9 @@ angular.module("dataControl", [])
      */
     $scope.$watch('$viewContentLoaded', function () {
       $scope.getProvideData($scope.selectedAccount.address);
+      if (!$scope.selectedData) {
+        return;
+      }
       $scope.getDataRequestList($scope.selectedData.dataName);
     });
 
@@ -45,7 +48,6 @@ angular.module("dataControl", [])
         return;
       }
       alert("确认数据请求失败！");
-      $scope.fresh();
     };
 
     /**
@@ -65,7 +67,6 @@ angular.module("dataControl", [])
         return;
       }
       alert("拒绝数据请求失败！");
-      $scope.fresh();
     };
   });
 

@@ -1,179 +1,302 @@
 angular.module("requestTask", []).controller("requestTask", function ($scope) {
-  //账户部分初始化
-  //初始取出账户
-  $scope.accounts = getRegisterAccounts();
-  $scope.requestDisabled = true;
-  $scope.updateDisabled = true;
-  $scope.taskSets = [];
-  $scope.information = "";
 
   /**
-   * 页面加载完后自动显示第一个用户名
+   * 页面加载完后
    */
   $scope.$watch('$viewContentLoaded', function () {
-    if ($scope.accounts.length > 0) {
-      $scope.selectedAccount = $scope.accounts[0].userName;
-    }
   });
 
   /**
-   * 动态检测是否合法
+   * 请求任务
    */
-  $scope.isRequestLegal = function () {
-    //若数据不存在或者请求者和数据提供者一致，则不合法
-    if (!$scope.isTaskExist() || $scope.isTaskRequestSame() || $scope.isTaskFinished()) {
-      $scope.requestDisabled = true;
+  $scope.requestTask = function (taskName, requester, password, information) {
+    if (!taskName || !requester || !password || !information) {
+      alert("请完备信息！");
       return;
-    } else {
-      $scope.nameError = "";
-      if (!$scope.information) {
-        $scope.infoError = "Please input the request information";
-        return;
-      }
-      $scope.infoError = "";
-      $scope.requestDisabled = false;
     }
-  };
-
-  /**
-   * 动态搜索对应数据名称是否存在
-   */
-  $scope.isTaskExist = function () {
-    if (!$scope.taskName) {
-      $scope.nameError = "Please input task name!";
-      return false;
+    if (!isNameLengthLegal(taskName)) {
+      alert("任务名不能为空或者大于32字符！");
+      return;
     }
-    //检查数据名称是否存在
-    if (!contractInstance.isTaskNameExist.call($scope.taskName)) {
-      $scope.nameError = "The task name is not exist!";
-      return false;
-    }
-    return true;
-  };
-
-  /**
-   * 动态搜索请求者是否与数据提供者相同
-   */
-  $scope.isTaskRequestSame = function () {
-    //获取数据对象合约
-    var taskObjectInstance = taskContract.at(contractInstance.getTaskAddressByTaskName.call($scope.taskName));
-    if ($scope.selectedAccount == getUserNameByAddress(taskObjectInstance.provider())) {
-      $scope.nameError = "The task requester can't not request own task!";
-      return true;
-    }
-    return false;
-  };
-
-  /**
-   * 判断任务是否已经完成
-   */
-  $scope.isTaskFinished = function () {
-    //获取数据对象合约
-    var taskObjectInstance = taskContract.at(contractInstance.getTaskAddressByTaskName.call($scope.taskName));
-    if (taskObjectInstance.isTaskStatusFinished.call()) {
-      $scope.nameError = "The task is finished!";
-      return true;
-    }
-    return false;
-  };
-
-  /**
-   * 请求数据
-   */
-  $scope.requestTask = function () {
     //解锁账户
-    if (!unlockEtherAccount(getUserAddressByName($scope.selectedAccount), $scope.password)) return;
-
-    //发送数据请求(需要添加参数)
-    try {
-      contractInstance.requestTask($scope.taskName, $scope.information, {
-        from: getUserAddressByName($scope.selectedAccount),
-        gas: 80000000
-      });
-    } catch (err) {
-      console.log(err);
+    if (!unlockEtherAccount(requester, password)) {
+      return;
     }
+    if (requestTask(taskName, requester, password, information)) {
+      alert("请求成功！");
+      return;
+    }
+    alert("请求失败！");
   };
 
   /**
-   * 获取对应请求者请求数据列表
+   * 获取对应请求者请求任务列表
    */
-  $scope.getRequestList = function () {
-    $scope.taskSets = [];
-    var address = getUserAddressByName($scope.selectedAccount);
-    //获取请求数据数量
-    var requestTaskNum = contractInstance.getTaskNumByRequester.call(address).toNumber();
-    for (var i = 0; i < requestTaskNum; i++) {
-      //获取数据名称
-      var task = [];
-      task.taskName = web3.toAscii(contractInstance.getRequestTaskNameByIndex.call(address, i));
-      //获取对应名称的权限合约
-      var accessContractInstance = accessContract.at(contractInstance.getTaskAccessByName.call(task.taskName));
-      task.provider = getUserNameByAddress(accessContractInstance.provider());
-      //获取当前状态
-      task.status = accessType[accessContractInstance.accessList(accessContractInstance.requestList(address))];
-      //获取当前请求备注信息
-      var requestContractInstance = requestContract.at(contractInstance.getTaskRequest.call(task.taskName, address));
-      task.information = requestContractInstance.information();
-      //存入数据
-      $scope.taskSets.push(task);
+  $scope.getTaskRequestList = function (requester) {
+    if (!isAddress(requester)) {
+      return;
     }
+    $scope.taskSet = getRequestTaskList(requester);
   };
 
   /**
    * 更新请求备注
    */
-  $scope.updateInfo = function () {
-    if (!$scope.taskName || !$scope.information) {
-      alert("请输入数据名称或备注");
+  $scope.updateInfo = function (taskName, requester, password, information) {
+    if (!taskName || !requester || !password || !information) {
+      alert("请完备信息！");
       return;
     }
-    if (!$scope.isTaskExist()) {
-      alert("数据名称不存在");
+    if (!isNameLengthLegal(taskName)) {
+      alert("任务名称长度不能超过32字符！");
       return;
     }
-    //解锁账户
-    if (!unlockEtherAccount(getUserAddressByName($scope.selectedAccount), $scope.password)) return;
 
-    //发送修改请求
-    try {
-      contractInstance.changeTaskRequestInfo($scope.taskName, $scope.information, {
-        from: getUserAddressByName($scope.selectedAccount),
-        gas: 80000000
-      });
-    } catch (err) {
-      console.log(err);
+    if (!isTaskNameExist(taskName)) {
+      alert("任务名不存在！");
+      return;
     }
+    if (!isTaskRequested(taskName, requester)) {
+      alert("尚未请求该任务！");
+      return;
+    }
+    if (isTaskAudited(taskName, requester)) {
+      alert("任务尚已被审核，不可修改！");
+      return;
+    }
+    if (updateTaskInformation(taskName, requester, password, information)) {
+      alert("更新成功！");
+      return;
+    }
+    alert("更新失败！");
   };
-
-  /**
-   * 判断更新备注是否合法
-   */
-  $scope.isUpdateLegal = function () {
-    //判断数据是否存在
-    if (!$scope.taskName || !$scope.isTaskExist()) {
-      $scope.updateDisabled = true;
-      $scope.nameError = "数据不存在";
-      return;
-    }
-    $scope.nameError = "";
-    //判断输入的请求备注是否合法
-    if (!$scope.information) {
-      $scope.updateDisabled = true;
-      $scope.infoError = "请输入备注";
-      return;
-    }
-    $scope.infoError = "";
-
-    //判断数据是否已经被确认或者拒绝
-    if (isTaskAudited($scope.taskName, getUserAddressByName($scope.selectedAccount))) {
-      $scope.infoError = "该数据已被审核，无法修改！";
-      $scope.updateDisabled = true;
-      return;
-
-    }
-    $scope.infoError = "";
-    $scope.updateDisabled = false;
-  };
-
 });
+
+/**
+ * 根据请求者返回任务列表
+ * @param requster
+ * @returns {Array}
+ */
+function getRequestTaskList(requester) {
+  var taskSet = [];
+  try {
+    //获取请求任务数量
+    var requestTaskNum = contractInstance.getTaskNumByRequester.call(requester).toNumber();
+    for (var i = 0; i < requestTaskNum; i++) {
+      //获取任务名称
+      var task = [];
+      task.taskName = web3.toAscii(contractInstance.getRequestTaskNameByIndex.call(requester, i));
+      task = getRequestTaskByName(task.taskName, requester);
+      //存入任务
+      taskSet.push(task);
+    }
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+  return taskSet;
+}
+
+/**
+ * 请求任务
+ * @param taskName
+ * @param requester
+ * @param password
+ * @param information
+ * @returns {boolean}
+ */
+function requestTask(taskName, requester, password, information) {
+  if (!isRequestTaskNameLegal(taskName, requester)) {
+    return false;
+  }
+  try {
+    //解锁账户
+    if (!unlockEtherAccount(requester, password)) {
+      return false;
+    }
+    //发送请求(一个参数待定)
+    contractInstance.requestTask(taskName, "test", information, {
+      from: requester,
+      gas: 80000000
+    });
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+  return true;
+}
+
+/**
+ * 返回请求的任务名称是否合法
+ * @param taskName
+ * @param requester
+ * @returns {boolean}
+ */
+function isRequestTaskNameLegal(taskName, requester) {
+  if (!taskName || !isAddress(requester)) {
+    alert("任务名称与请求者地址不能为空！");
+    return false;
+  }
+  if (!isTaskNameExist(taskName)) {
+    alert("该任务不存在！");
+    return false;
+  }
+  if (isTaskRequested(taskName, requester)) {
+    alert("该任务已经被该账户请求！");
+    return false;
+  }
+  if (isTaskFinished(taskName)) {
+    alert("该任务已经结束！");
+    return false;
+  }
+  //判断是否与任务名称相同
+  var task = searchTaskByName(taskName);
+  if (getUserAddressByName(task.provider) == requester) {
+    alert("不能申请自己提供的任务！");
+    return false;
+  }
+  return true;
+}
+
+
+/**
+ * 根据请求者返回任务列表
+ * @param requster
+ * @returns {Array}
+ */
+function getRequestTaskList(requester) {
+  var taskSet = [];
+  try {
+    //获取请求任务数量
+    var requestTaskNum = contractInstance.getTaskNumByRequester.call(requester).toNumber();
+    for (var i = 0; i < requestTaskNum; i++) {
+      //获取任务名称
+      var task = [];
+      task.taskName = web3.toAscii(contractInstance.getRequestTaskNameByIndex.call(requester, i));
+      task = getRequestTaskByName(task.taskName, requester);
+      //存入任务
+      taskSet.push(task);
+    }
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+  return taskSet;
+}
+
+/**
+ * 根据任务名称获取请求任务信息及状态
+ * @param taskName
+ * @returns {Array}
+ */
+function getRequestTaskByName(taskName, requester) {
+  var task = [];
+  try {
+    //获取任务基本信息
+    task = searchTaskByName(taskName);
+    //获取对应名称的权限合约
+    var accessContractInstance = accessContract.at(contractInstance.getTaskAccessByName.call(taskName));
+    task.requesterName = getUserNameByAddress(requester);
+    task.requester = requester;
+    task.requestNumber = accessContractInstance.requesterNum();
+    //获取当前状态
+    task.status = accessType[accessContractInstance.accessList(accessContractInstance.requestList(requester))];
+    //如果没有请求过，返回空
+    if (task.status == accessType[0]) {
+      return [];
+    }
+    //获取当前请求备注信息
+    var requestContractInstance = requestContract.at(contractInstance.getTaskRequest.call(taskName, requester));
+    task.information = requestContractInstance.information();
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+  return task;
+}
+
+/**
+ * 返回是否已经请求过该任务
+ * @param taskName
+ * @param requester
+ * @returns {boolean}
+ */
+function isTaskRequested(taskName, requester) {
+  var task = getRequestTaskByName(taskName, requester);
+  if (task) {
+    //判断是否已经审核
+    return (task.status == accessType[1] || task.status == accessType[2] || task.status == accessType[3]);
+  }
+  return false;
+}
+
+/**
+ * 返回对应任务是否已经被确认或者拒绝
+ * @param taskName
+ * @param requester
+ * @returns {boolean}
+ */
+function isTaskAudited(taskName, requester) {
+  var task = getRequestTaskByName(taskName, requester);
+  if (task) {
+    //判断是否已经审核
+    return (task.status == accessType[2] || task.status == accessType[3]);
+  }
+  return false;
+}
+
+/**
+ * 更新请求备注
+ * @param taskName
+ * @param requester
+ * @param password
+ * @param information
+ * @returns {boolean}
+ */
+function updateTaskInformation(taskName, requester, password, information) {
+  if (!taskName || !requester || !password || !information || !isNameLengthLegal(taskName)) {
+    return false;
+  }
+  if (!isTaskNameExist(taskName)) {
+    return false;
+  }
+  if (!isTaskRequested(taskName, requester)) {
+    return false;
+  }
+  if (isTaskAudited(taskName, requester)) {
+    return false;
+  }
+
+  try {
+    //解锁账户
+    if (!unlockEtherAccount(requester, password)) {
+      return false;
+    }
+    contractInstance.changeTaskRequestInfo(taskName, information, {
+      from: requester,
+      gas: 80000000
+    });
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+  return true;
+}
+
+/**
+ * 返回任务是否完成
+ * @param taskName
+ * @returns {boolean}
+ */
+function isTaskFinished(taskName) {
+  if (!taskName) return false;
+  try {
+    var taskObjectInstance = taskContract.at(contractInstance.getTaskAddressByTaskName.call(taskName));
+    if (taskObjectInstance.isTaskStatusFinished.call()) {
+      return true;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
