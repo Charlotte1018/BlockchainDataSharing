@@ -806,21 +806,22 @@ var taskStatus = ["Unfinished", "Finished"];
 var tool_type = {
   key: "Tool",
   value: [
-    "802.1", "802.11 frames", "802.11a", "802.11b", "802.11g", "802.15", "802.15.4", "802.16",
-    "Bluetooth", "DTN", "GPS", "MANET", "Others", "ONE", "ORBIT", "RFID", "RFMON", "SNMP", "EventsReader",
-    "Wi-Fi hotspot", "WiBro", "WiMax", "auth log", "cell-network", "iMotes", "location", "packet trace",
-    "sensor network", "signal strength", "system-log", "tcp-dump", "vehicular network",
-    "wardriving", "WMN"
+    "802.11", "802.11 frames", "802.11a", "802.11b", "802.11g", "802.15", "802.15.4", "802.16",
+    "Bluetooth", "DTN", "GPS", "MANET", "Others", "ONE", "ORBIT", "RFID", "RFMON", "SNMP", "StandardEventsReader",
+    "Wi-Fi hotspot", "WiBro", "WiMax", "authentication log", "cellular network", "iMotes", "location", "packet trace",
+    "sensor network", "signal strength", "syslog", "tcp dump", "vehicular network",
+    "wardriving", "wireless mesh network", "wireless multihop networks"
   ]
 };
 
 var purpose_type = {
   key: "Purpose",
   value: [
-    "Bit Error", "Compute", "Content Eval",
-    "Educational", "Energy-effi", "Behavior", "Localization", "Location-aware",
-    "MAC Protocol", "Motion Detect", "Net-Diagnosis", "Net Analysis", "Net Security",
-    "Network Sim", "Others", "Opp Connect", "Positioning", "Routing", "Social", "User Mobility"
+    "Bit Error Characterization", "Computer Malware Investigation", "Content Distribution Evaluation",
+    "Educational Use", "Energy-efficient Wireless Net", "Human Behavior Modeling", "Localization", "Location-aware Computing",
+    "MAC Protocol Development", "Motion Detection", "Network Diagnosis", "Network Performance Analysis", "Network Security",
+    "Network Simulation", "Others", "Opportunistic Connectivity", "Positioning Systems", "Routing Protocol",
+    "Social Network Analysis", "User Mobility Characterization", "Usage Characterization"
   ]
 };
 
@@ -984,12 +985,27 @@ function getPurposeType() {
 }
 
 /**
- * 返回字符串长度是否超出
+ * 返回字符串长度是否合法(默认bytes32)
  * @param name
  * @param length
  * @returns {boolean}
  */
 function isNameLengthLegal(name, length) {
-  if (!name || !length) return false;
-  return web3.fromAscii(name).length <= length;
+  if (!name) return false;
+  if (!length) {
+    length = 66;
+  }
+  var nameLength = formatBytes(name).length;
+  return nameLength <= length && nameLength > 0;
+}
+
+/**
+ * 格式化字符串
+ * @param bytes
+ * @returns {*}
+ */
+function formatBytes(bytes) {
+  //去除前后空格
+  bytes = bytes.replace(/(^\s*)|(\s*$)/g, '');
+  return web3.fromAscii(bytes);
 }

@@ -200,7 +200,7 @@ angular.module('mainrouter', [
         views: {
           "content": {
             templateUrl: 'views/blockchain/searches/searchData.html',
-            controller: 'search'
+            controller: 'searchData'
           }
         }
       })

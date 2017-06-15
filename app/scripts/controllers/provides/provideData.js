@@ -1,12 +1,11 @@
 angular.module("provide", []).controller("provideData", function ($scope) {
-  //账户部分初始化
-  //初始取出账户
+  //初始化
   $scope.tool_type = getToolType();
   $scope.purpose_type = getPurposeType();
   $scope.types = [];
 
   /**
-   * 页面加载完后自动显示第一个用户名
+   * 页面加载完后
    */
   $scope.$watch('$viewContentLoaded', function () {
   });
@@ -14,17 +13,16 @@ angular.module("provide", []).controller("provideData", function ($scope) {
   /**
    * 创建数据
    */
-  $scope.provideData = function (address, password, dataName, introduction, capability, cap_pwd, select_tool_type, select_purpose_type) {
-    alert(web3.toHex(select_tool_type));
-    return
+  $scope.provideData = function (address, password, dataName, introduction, capability,
+                                 cap_pwd, select_tool_type, select_purpose_type) {
     if (!address || !password || !dataName || !introduction || !capability || !cap_pwd
       || !select_tool_type || !select_purpose_type) {
       alert("请填写完善信息！");
       return;
     }
-    if (!isNameLengthLegal(dataName, 32) || !isNameLengthLegal(cap_pwd, 32) ||
-      !isNameLengthLegal(select_tool_type, 32) || !isNameLengthLegal(select_purpose_type, 32)) {
-      alert("数据名称、权限密码、类型相关字段不能超过15个字符！");
+    if (!isNameLengthLegal(dataName) || !isNameLengthLegal(cap_pwd) ||
+      !isNameLengthLegal(select_tool_type) || !isNameLengthLegal(select_purpose_type)) {
+      alert("数据名称、权限密码、类型相关字段不能超过32个字符且不为空字符串！");
       return;
     }
 
@@ -39,7 +37,7 @@ angular.module("provide", []).controller("provideData", function ($scope) {
         return;
       }
       if (!isNameLengthLegal($scope.types[i].key) || !isNameLengthLegal($scope.types[i].value)) {
-        alert("类型相关字段不能超过15个字符！");
+        alert("类型相关字段不能超过32个字符且不为空字符串！！");
         return;
       }
     }
@@ -50,22 +48,21 @@ angular.module("provide", []).controller("provideData", function ($scope) {
     //添加数据
     try {
       //添加数据源
-      contractInstance.createData(dataName, introduction, capability, cap_pwd, {
+      contractInstance.createData(formatBytes(dataName), introduction, capability, formatBytes(cap_pwd), {
         from: address,
         gas: 80000000
       });
-      alert($scope.tool_type.key + select_tool_type + dataName);
       //添加数据类型
-      contractInstance.addTypeToData($scope.tool_type.key, select_tool_type, dataName, {
+      contractInstance.addTypeToData(formatBytes($scope.tool_type.key), formatBytes(select_tool_type), formatBytes(dataName), {
         from: address,
         gas: 8000000
       });
-      contractInstance.addTypeToData($scope.purpose_type.key, select_purpose_type, dataName, {
+      contractInstance.addTypeToData(formatBytes($scope.purpose_type.key), formatBytes(select_purpose_type), formatBytes(dataName), {
         from: address,
         gas: 8000000
       });
       for (i = 0; i < $scope.types.length; i++) {
-        contractInstance.addTypeToData($scope.types[i].key, $scope.types[i].value, dataName, {
+        contractInstance.addTypeToData(formatBytes($scope.types[i].key), formatBytes($scope.types[i].value), formatBytes(dataName), {
           from: address,
           gas: 8000000
         });
@@ -97,15 +94,19 @@ angular.module("provide", []).controller("provideData", function ($scope) {
   };
 
   /**
-   * 检查数据名称是否存在
+   * 检查数据名称是否合法
    */
-  $scope.checkDataNameExist = function (dataName) {
+  $scope.checkProvideDataNameLegal = function (dataName) {
     if (!dataName) {
       $scope.nameError = "Please input data name.";
       return;
     }
     if (isDataNameExist(dataName)) {
       $scope.nameError = "The name is exist";
+      return;
+    }
+    if (!isNameLengthLegal(dataName)) {
+      $scope.nameError = "The length of dataName should less than 32 char and not null"
       return;
     }
     $scope.nameError = "";
@@ -141,7 +142,4 @@ angular.module("provide", []).controller("provideData", function ($scope) {
     if (provideNum > 0) $scope.selectedData = $scope.dataSets[0].dataName;
   };
 
-  $scope.getDataRequestList = function () {
-
-  };
 });
