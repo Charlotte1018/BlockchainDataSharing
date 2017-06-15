@@ -148,6 +148,11 @@ function getProvideDataList(provider) {
   return dataSet;
 }
 
+/**
+ * 根据数据名称获取数据
+ * @param dataName
+ * @returns {Array}
+ */
 function getProvideData(dataName) {
   var data = searchDataByName(dataName);
   try {

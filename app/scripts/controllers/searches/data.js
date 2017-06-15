@@ -42,7 +42,7 @@ function getAllData() {
       //获取数据对象合约
       var dataObjectInstance = dataContract.at(contractInstance.getDataAddressByIndex.call(i));
       var dataSet = [];
-      //获取对象名称
+      //获取对象详细信息
       dataSet = searchDataByName(web3.toAscii(dataObjectInstance.dataName()));
       dataSets.push(dataSet);
     }

@@ -91,7 +91,7 @@ angular.module('mainrouter', [
         url: '/personalDataList',
         views: {
           "content": {
-            templateUrl: 'views/blockchain/datamanagements/personalDataList.html',
+            templateUrl: 'views/blockchain/management/personalDataList.html',
             controller: 'personalData'
           }
         }
@@ -100,7 +100,7 @@ angular.module('mainrouter', [
         url: '/personalTaskList',
         views: {
           "content": {
-            templateUrl: 'views/blockchain/datamanagements/personalTaskList.html',
+            templateUrl: 'views/blockchain/management/personalTaskList.html',
             controller: 'personalTask'
           }
         }
@@ -109,7 +109,7 @@ angular.module('mainrouter', [
         url: '/dataControl',
         views: {
           "content": {
-            templateUrl: 'views/blockchain/datamanagements/dataControl.html',
+            templateUrl: 'views/blockchain/management/dataControl.html',
             controller: 'dataControl'
           }
         }
@@ -118,7 +118,7 @@ angular.module('mainrouter', [
         url: '/personalTaskControl',
         views: {
           "content": {
-            templateUrl: 'views/blockchain/datamanagements/provideTaskControl.html',
+            templateUrl: 'views/blockchain/management/provideTaskControl.html',
             controller: 'provideCtrlTask'
           }
         }
