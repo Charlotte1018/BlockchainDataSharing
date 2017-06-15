@@ -146,7 +146,7 @@ angular.module('mainrouter', [
         views: {
           "content": {
             templateUrl: 'views/blockchain/provides/provideDataList.html',
-            controller: 'provide'
+            controller: 'provideData'
           }
         }
       })
@@ -164,7 +164,7 @@ angular.module('mainrouter', [
         views: {
           "content": {
             templateUrl: 'views/blockchain/requests/requestData.html',
-            controller: 'request'
+            controller: 'requestData'
           }
         }
       })
@@ -182,7 +182,7 @@ angular.module('mainrouter', [
         views: {
           "content": {
             templateUrl: 'views/blockchain/requests/requestDataList.html',
-            controller: 'request'
+            controller: 'requestData'
           }
         }
       })

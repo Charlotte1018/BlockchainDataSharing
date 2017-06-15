@@ -106,7 +106,7 @@ angular.module("provide", []).controller("provideData", function ($scope) {
       return;
     }
     if (!isNameLengthLegal(dataName)) {
-      $scope.nameError = "The length of dataName should less than 32 char and not null"
+      $scope.nameError = "The length of dataName should less than 32 char and not null";
       return;
     }
     $scope.nameError = "";
@@ -115,31 +115,35 @@ angular.module("provide", []).controller("provideData", function ($scope) {
   /**
    * 查询对应账户所提供的数据列表
    */
-  $scope.getProvideData = function () {
-    $scope.dataSets = [];
-    //获取提供者提供的数据总数
-    var provideNum = contractInstance.getDataNumByProvider.call(getUserAddressByName($scope.selectedAccount)).toNumber();
-    //逐个获取数据对象
-    for (var i = 0; i < provideNum; i++) {
-      var dataSet = [];
-      dataSet.dataName = web3.toAscii(contractInstance.getProvideDataNameByIndex.call(getUserAddressByName($scope.selectedAccount), i));
-      //根据数据名称获取数据对象合约
-      var dataObjectInstance = dataContract.at(contractInstance.getDataAddressByDataName.call(dataSet.dataName));
-      //获取对象介绍
-      dataSet.introduction = dataObjectInstance.introduction();
-      //获取对象类型
-      dataSet.types = [];
-      for (var j = 0; j < dataObjectInstance.typeNum().toNumber(); j++) {
-        //循环添加类型
-        var type = [];
-        type.key = web3.toAscii(dataObjectInstance.dataTypes(j)[0]);
-        type.value = web3.toAscii(dataObjectInstance.dataTypes(j)[1]);
-        dataSet.types.push(type);
-      }
-      $scope.dataSets.push(dataSet);
-    }
-    //设置默认名称
-    if (provideNum > 0) $scope.selectedData = $scope.dataSets[0].dataName;
+  $scope.getProvideData = function (provider) {
+    $scope.dataSet = getProvideDataList(provider);
   };
 
 });
+
+/**
+ * 根据提供者返回数据列表
+ * @param provider
+ * @returns {Array}
+ */
+function getProvideDataList(provider) {
+  var dataSet = [];
+  if (!provider || !isAddress(provider)) {
+    return [];
+  }
+  try {
+    //获取提供者提供的数据总数
+    var provideNum = contractInstance.getDataNumByProvider.call(provider).toNumber();
+    //逐个获取数据对象
+    for (var i = 0; i < provideNum; i++) {
+      var data = [];
+      data.dataName = web3.toAscii(contractInstance.getProvideDataNameByIndex.call(provider, i));
+      data = searchDataByName(data.dataName);
+      dataSet.push(data);
+    }
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+  return dataSet;
+}
