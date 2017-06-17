@@ -15,7 +15,7 @@
                 <select class="form-control m-bot15" ng-model="selectedAccount"
                         ng-init="selectedAccount = nodeRegisterAccounts[0]"
                         ng-options="account.userName for account in nodeRegisterAccounts"
-                        ng-change="getPersonalDataList(selectedAccount.address)">
+                        ng-change="getPersonalTaskList(selectedAccount.address)">
                 </select>
               </div>
             </div>

@@ -20,6 +20,7 @@ angular.module("taskControl", [])
       $scope.taskSet = getProvideTaskList(address);
       if ($scope.taskSet && $scope.taskSet.length > 0) {
         $scope.selectedTask = $scope.taskSet[0];
+        $scope.getTaskRequestList($scope.selectedTask.taskName);
       }
     };
 
@@ -42,7 +43,6 @@ angular.module("taskControl", [])
      * 查询对应任务的提供者列表
      */
     $scope.getTaskRequestList = function (taskName) {
-      if (!taskName) return;
       $scope.requestList = getRequestListByTaskName(taskName);
     };
 
@@ -209,6 +209,9 @@ function endTask(provider, password, taskName) {
  */
 function getRequestListByTaskName(taskName) {
   var requestList = [];
+  if (!taskName) {
+    return requestList;
+  }
   try {
     //获取权限对象
     var accessContractInstance = accessContract.at(contractInstance.getTaskAccessByName.call(taskName));

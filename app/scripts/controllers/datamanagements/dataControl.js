@@ -17,10 +17,13 @@ angular.module("dataControl", [])
      * 查询对应账户所提供的数据列表
      */
     $scope.getProvideData = function (address) {
+      if (!address) return;
       $scope.dataSet = getProvideDataList(address);
       if ($scope.dataSet && $scope.dataSet.length > 0) {
         $scope.selectedData = $scope.dataSet[0];
       }
+      if (!$scope.selectedData) return;
+      $scope.getDataRequestList($scope.selectedData.dataName);
     };
 
     /**

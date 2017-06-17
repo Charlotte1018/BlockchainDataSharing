@@ -6,7 +6,6 @@ angular.module('mainrouter', [
   'dataControl',
   'taskControl',
   'personalTask',
-  'datamanagementstask',
   'provideData',
   'provideTask',
   'requestData',

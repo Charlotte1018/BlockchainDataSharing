@@ -35,8 +35,7 @@
                 <div class="form-group">
                   <div class="col-lg-offset-2 col-lg-10" ng-show="!isTaskFinished(selectedTask.taskName)">
                     <button type="submit" class="btn btn-success col-lg-2"
-                            ng-click="endTask(selectedAccount.address, password,selectedTask.taskName)"
-                            ng-disabled="requestDisabled">Closed Task
+                            ng-click="endTask(selectedAccount.address, password,selectedTask.taskName)">Closed Task
                     </button>
                   </div>
                 </div>
@@ -45,6 +44,13 @@
                   <div class="col-lg-10">
                     <input class="form-control" placeholder="Password" ng-model="password" type="password">
                   </div>
+
+                </div>
+                <div class="form-group">
+                  <label class="col-lg-offset-10 col-lg-4 control-label"><button class="btn btn-default col-lg-4"
+                          ng-click="getTaskRequestList(selectedTask.taskName)">
+                    Refresh
+                  </button></label>
                 </div>
                 <div><br><br>
 
@@ -57,29 +63,26 @@
                       <th class="hidden-phone">Status</th>
                       <th class="hidden-phone">Confirm</th>
                       <th class="hidden-phone">Reject</th>
-                      <th class="hidden-phone">Refresh</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="odd gradeX" ng-repeat="requester in requesters" render-finish>
+                    <tr class="odd gradeX" ng-repeat="request in requestList" render-finish>
                       <td><input type="checkbox" class="checkboxes" value="1"/></td>
-                      <td>{{requester.userName}}</td>
-                      <td>{{requester.information}}</td>
+                      <td>{{request.requesterName}}</td>
+                      <td>{{request.information}}</td>
                       <!--<td class="hidden-phone">{{data.provider}}</td>-->
-                      <td class="hidden-phone">{{requester.status}}</td>
-
-                      <td class="hidden-phone">
-                        <button class="btn btn-success btn-xs" ng-click="confirmTask(selectedTask,requester.address)"
-                                ng-disabled="requester.control_disable">Confirm
+                      <td class="hidden-phone">{{request.status}}</td>
+                      <td>
+                        <button class="btn btn-success btn-xs"
+                                ng-click="confirmTask(selectedAccount.address, password, selectedTask.taskName,request.requester)">
+                          Confirm
                         </button>
                       </td>
                       <td class="hidden-phone">
-                        <button class="btn btn-danger btn-xs" ng-click="rejectTask(selectedTask,requester.address)"
-                                ng-disabled="requester.control_disable">Reject
+                        <button class="btn btn-danger btn-xs"
+                                ng-click="rejectTask(selectedAccount.address, password, selectedTask.taskName,request.requester)">
+                          Reject
                         </button>
-                      </td>
-                      <td class="hidden-phone">
-                        <button class="btn btn-danger btn-xs" ng-click="refresh()">Refresh</button>
                       </td>
                     </tr>
                     </tbody>
