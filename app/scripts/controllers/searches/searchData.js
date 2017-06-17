@@ -23,6 +23,18 @@ angular.module("searchData", [])
       }
       $scope.dataSet = searchDataByType(type_key, type_value);
     };
+
+    /**
+     * 根据数据名称搜索请求列表
+     * @param dataName
+     */
+    $scope.searchDataRequestByName = function(dataName){
+      if (!dataName) {
+        alert("请输入名称！");
+        return;
+      }
+      $scope.requestList = getRequestListByDataName(dataName);
+    };
   });
 
 /**

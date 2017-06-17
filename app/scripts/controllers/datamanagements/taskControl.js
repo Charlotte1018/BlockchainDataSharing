@@ -209,7 +209,8 @@ function endTask(provider, password, taskName) {
  */
 function getRequestListByTaskName(taskName) {
   var requestList = [];
-  if (!taskName) {
+  if (!taskName || !isTaskNameExist(taskName)) {
+    alert("任务不存在！");
     return requestList;
   }
   try {

@@ -161,6 +161,10 @@ function rejectData(provider, password, dataName, requester) {
  */
 function getRequestListByDataName(dataName) {
   var requestList = [];
+  if (!dataName || !isDataNameExist(dataName)) {
+    alert("数据不存在！");
+    return [];
+  }
   try {
     //获取权限对象
     var accessContractInstance = accessContract.at(contractInstance.getDataAccessByName.call(dataName));

@@ -23,6 +23,18 @@ angular.module("searchTask", [])
       }
       $scope.taskSets = searchTaskByType(type_key, type_value);
     };
+
+    /**
+     * 根据任务名称搜索请求列表
+     * @param taskName
+     */
+    $scope.searchTaskRequestByName = function(taskName){
+      if (!taskName) {
+        alert("请输入名称！");
+        return;
+      }
+      $scope.requestList = getRequestListByTaskName(taskName);
+    };
   });
 
 /**

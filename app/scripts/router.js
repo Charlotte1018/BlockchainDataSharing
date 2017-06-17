@@ -206,11 +206,29 @@ angular.module('mainrouter', [
           }
         }
       })
+      .state('app.searchDataRequest', {
+        url: '/searchDataRequest',
+        views: {
+          "content": {
+            templateUrl: 'views/blockchain/searches/searchDataRequest.html',
+            controller: 'searchData'
+          }
+        }
+      })
       .state('app.searchTask', {
         url: '/searchTask',
         views: {
           "content": {
             templateUrl: 'views/blockchain/searches/searchtask.html',
+            controller: 'searchTask'
+          }
+        }
+      })
+      .state('app.searchTaskRequest', {
+        url: '/searchTaskRequest',
+        views: {
+          "content": {
+            templateUrl: 'views/blockchain/searches/searchTaskRequest.html',
             controller: 'searchTask'
           }
         }
