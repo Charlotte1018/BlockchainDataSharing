@@ -14,6 +14,7 @@ angular.module('ctrlModule', [])
       'AngularJS',
       'Karma'
     ];
+<<<<<<< HEAD
   })
   .controller('login', function () {
     this.awesomeThings = [
@@ -23,3 +24,9 @@ angular.module('ctrlModule', [])
     ];
 
   });
+=======
+  });
+
+
+
+>>>>>>> 14c43cff1f6bfaeabe5b4333b5ee1ac93e86860c
