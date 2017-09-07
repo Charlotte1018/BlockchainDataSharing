@@ -1,19 +1,32 @@
 <body class="login-body">
-    <section class="profile-nav alt green-border ">
-        <section class="wrapper ">
-            <div class="profile-nav alt green-border col-lg-10 col-lg-offset-1">
-                <section class="panel">
-                    <div class="user-heading alt green-bg">
+<section class="profile-nav alt green-border ">
+  <section class="wrapper ">
+    <div class="profile-nav alt green-border col-lg-10 col-lg-offset-1">
+      <section class="panel">
+        <div class="user-heading alt green-bg">
 
-                        <h1>Accounts List</h1>
-                    </div>
-                    <ul class="nav nav-pills nav-stacked">
-                        <li ng-repeat="account in accounts"><a href="javascript:;"> <i class="icon-time"></i>{{account}} </a></li>
-
-                        <!--<li><a href="javascript:;"> <i class="icon-envelope-alt"></i> Message <span class="label label-success pull-right r-activity">10</span></a></li>-->
-                    </ul>
-                </section>
-            </div>
-        </section>
-    </section>
+          <h1>Accounts List</h1>
+        </div>
+        <table class="table table-striped border-top">
+          <thead>
+          <tr>
+            <th style="width:8px;"><input type="checkbox" class="group-checkable"/></th>
+            <th>User Name</th>
+            <th class="hidden-phone">Account address</th>
+            <th>Balance(Ether)</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="odd gradeX" ng-repeat="account in nodeAccounts">
+            <td><input type="checkbox" class="checkboxes" value="1"/></td>
+            <td class="hidden-phone">{{account.userName}}</td>
+            <td>{{account.address}}</td>
+            <td>{{account.balance}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </section>
+</section>
 </body>

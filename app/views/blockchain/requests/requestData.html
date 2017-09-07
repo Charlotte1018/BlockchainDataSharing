@@ -10,11 +10,13 @@
           </header>
           <div class="panel-body">
             <form class="form-horizontal" id="default">
-              <fieldset  class="step">
+              <fieldset class="step">
                 <div class="form-group">
                   <label class="col-lg-2 control-label">Request:</label>
                   <div class="col-lg-10">
-                    <select class="form-control" ng-model="selectedAccount" ng-options="account.userName as account.userName for account in accounts">
+                    <select class="form-control" ng-init="selectedAccount=nodeRegisterAccounts[0]"
+                            ng-model="selectedAccount"
+                            ng-options="account.userName for account in nodeRegisterAccounts">
                     </select>
                   </div>
                 </div>
@@ -24,25 +26,32 @@
                     <input class="form-control" placeholder="Password" ng-model="password" type="password">
                   </div>
                 </div>
-
                 <div class="form-group">
                   <label class="col-lg-2 control-label">Data Name</label>
                   <div class="col-lg-10">
-                    <input type="text" id="dataName" class="form-control" placeholder="Data Name" ng-model="dataName" ng-change="isRequestLegal()">
-                    <label for="dataName">{{nameError}}</label>
+                    <input type="text" id="dataName" class="form-control" placeholder="Data Name" ng-model="dataName">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-lg-2 control-label">Request Ticket</label>
+                  <div class="col-lg-10">
+                    <input type="text" id="dataName" class="form-control" placeholder="Request Ticket"
+                           ng-model="requestT">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-lg-2 control-label">Remark</label>
                   <div class="col-lg-10">
-                    <input id="Remark" type="text" class="form-control" placeholder="Remark" ng-model="information" ng-change="isRequestLegal()">
-                    <label for="Remark">{{infoError}}</label>
+                    <input id="Remark" type="text" class="form-control" placeholder="Remark" ng-model="information">
                   </div>
                 </div>
 
                 <div class="form-group">
                   <div class="col-lg-offset-2 col-lg-10">
-                    <button type="submit" class="btn btn-success col-lg-2" ng-click="requestData()" ng-disabled="requestDisabled">Request Data</button>
+                    <button type="submit" class="btn btn-success col-lg-2"
+                            ng-click="requestData(dataName, selectedAccount.address, password, requestT, information)">
+                      Request Data
+                    </button>
                   </div>
                 </div>
               </fieldset>

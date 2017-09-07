@@ -1,23 +1,28 @@
 <body>
 <section class="profile-nav alt green-border ">
   <section class="wrapper ">
-    <div ng-show="accounts.length > 0">
+    <div>
       <section class="panel col-lg-10 col-lg-offset-1">
         <header class="panel-heading">
           <h4>Request's Data List</h4>
-        </header><br>
+        </header>
+        <br>
         <div class="panel-body">
           <form class="form-horizontal" role="form">
             <div class="form-group">
-              <label  class="col-lg-2 control-label">Select Request</label>
+              <label class="col-lg-2 control-label">Select Request</label>
               <div class="col-lg-10">
-                <select class="form-control m-bot15" ng-model="selectedAccount" ng-options="account.userName as account.userName for account in accounts">
+                <select class="form-control m-bot15" ng-model="selectedAccount"
+                        ng-init="selectedAccount=registerAccounts[0]"
+                        ng-options="account.userName for account in registerAccounts">
                 </select>
               </div>
             </div>
             <div class="form-group">
               <div class="col-lg-offset-2 col-lg-10">
-                <button type="submit" class="btn btn-danger col-lg-2" ng-click="getRequestList()">Search </button>
+                <button type="submit" class="btn btn-danger col-lg-2"
+                        ng-click="getRequestList(selectedAccount.address)">Search
+                </button>
               </div>
             </div>
           </form>
@@ -30,7 +35,7 @@
         <table class="table table-striped border-top">
           <thead>
           <tr>
-            <th style="width:8px;"><input type="checkbox" class="group-checkable" /></th>
+            <th style="width:8px;"><input type="checkbox" class="group-checkable"/></th>
             <th>Data Name</th>
             <th class="hidden-phone">Provider</th>
             <th class="hidden-phone">Remarks</th>
@@ -39,12 +44,12 @@
           </tr>
           </thead>
           <tbody>
-          <tr class="odd gradeX" ng-repeat="dataSet in dataSets">
-            <td><input type="checkbox" class="checkboxes" value="1" /></td>
-            <td>{{dataSet.dataName}}</td>
-            <td class="hidden-phone">{{dataSet.provider}}</td>
-            <td class="hidden-phone">{{dataSet.information}}</td>
-            <td class="hidden-phone">{{dataSet.status}}</td>
+          <tr class="odd gradeX" ng-repeat="data in dataSet">
+            <td><input type="checkbox" class="checkboxes" value="1"/></td>
+            <td>{{data.dataName}}</td>
+            <td class="hidden-phone">{{data.provider}}</td>
+            <td class="hidden-phone">{{data.information}}</td>
+            <td class="hidden-phone">{{data.status}}</td>
           </tr>
           </tbody>
         </table>
@@ -53,46 +58,49 @@
       <section class="panel col-lg-10 col-lg-offset-1">
         <header class="panel-heading">
           <h4>Modify Request's Remark</h4>
-        </header><br>
+        </header>
+        <br>
         <div class="panel-body">
           <form class="form-horizontal" role="form">
             <div class="form-group">
               <label class="col-lg-2 control-label">Data Name</label>
               <div class="col-lg-10">
-                <input type="text" id="dataName" class="form-control" placeholder="Data Name" ng-model="dataName" ng-change="isRequestLegal()">
+                <input type="text" id="dataName" class="form-control" placeholder="Data Name" ng-model="dataName"
+                       ng-change="isRequestLegal()">
                 <label for="dataName">{{nameError}}</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-2 control-label">Select Request</label>
+              <div class="col-lg-10">
+                <select class="form-control m-bot15" ng-model="selectedUpdateAccount"
+                        ng-init="selectedUpdateAccount=nodeRegisterAccounts[0]"
+                        ng-options="account.userName for account in nodeRegisterAccounts">
+                </select>
               </div>
             </div>
             <div class="form-group">
               <label class="col-lg-2 control-label">New Remarks</label>
               <div class="col-lg-10">
-                <input type="text" id="information" class="form-control" placeholder="New Remarks" ng-model="information" ng-change="isUpdateLegal()">
-                <label >{{infoError}}</label>
+                <input type="text" id="dataName" class="form-control" placeholder="New Remarks" ng-model="information">
               </div>
             </div>
             <div class="form-group">
               <label class="col-lg-2 control-label">Password</label>
               <div class="col-lg-10">
-                <input type="text" id="password" class="form-control" placeholder="password" ng-model="password" ng-change="isUpdateLegal()">
-                <label for="dataName">{{nameError}}</label>
+                <input type="text" id="dataName" class="form-control" placeholder="password" ng-model="password">
               </div>
             </div>
-
             <div class="form-group">
               <div class="col-lg-offset-2 col-lg-10">
-                <button type="submit" class="btn btn-danger col-lg-2" ng-click="updateInfo()" ng-disabled="updateDisabled">Modify</button>
+                <button type="submit" class="btn btn-danger col-lg-2"
+                        ng-click="updateInfo(dataName, selectedUpdateAccount.address, password, information)">Update
+                </button>
               </div>
             </div>
           </form>
         </div>
       </section>
-
-
-
-
-
-
-
 
 
     </div>

@@ -14,7 +14,12 @@ angular.module('ctrlModule', [])
       'AngularJS',
       'Karma'
     ];
+  })
+  .controller('login', function () {
+    this.awesomeThings = [
+      'HTML5 Boilerplate',
+      'AngularJS',
+      'Karma'
+    ];
+
   });
-
-
-
