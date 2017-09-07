@@ -58,11 +58,9 @@ var auth = true;
  * endTask(bytes32 taskName) —— 根据任务名称结束任务，返回是否成功(bool)
  * setDataCapability(bytes32 dataName, bytes32 cap_pwd, string cap) —— 根据数据名称、权限密码和新权限字段设置权限，返回是否成功(bool)
  */
-<<<<<<< HEAD
+
 var contractAddress = "0x8ad80Ab9Cd6ee07f1d7eC075775A6775c12C89AF";
-=======
-var contractAddress = "0x6c3f81E3F2d16f62b132cc878101CCA8f9836f30";
->>>>>>> 14c43cff1f6bfaeabe5b4333b5ee1ac93e86860c
+
 var abi = [{
   "constant": false,
   "inputs": [{"name": "taskName", "type": "bytes32"}, {"name": "requester", "type": "address"}],
@@ -977,8 +975,6 @@ function isNameLengthLegal(name, length) {
   var nameLength = formatBytes(name).length;
   return nameLength <= length && nameLength > 0;
 }
-
-<<<<<<< HEAD
 /**
  * 格式化字符串
  * @param bytes
@@ -989,29 +985,4 @@ function formatBytes(bytes) {
   bytes = bytes.replace(/(^\s*)|(\s*$)/g, '');
   return web3.fromAscii(bytes);
 }
-=======
-angular
-  .module('uiRouterApp', [
-    'ui.router',
-    'mainrouter',
-    'directiveModule'
-  ])
-  .config(function ($urlRouterProvider) {
-    $urlRouterProvider.when("/", "app/login");
-    $urlRouterProvider.otherwise('app/login');
-  })
-  .config(['$locationProvider', function ($locationProvider) {
-    $locationProvider.html5Mode({
-      enabled: false, // true隐藏# false显示#
-      requireBase: false
-    })
-  }]);
-  angular.module('config',[])
-  .controller('config',function($scope){
-      $scope.contractAddress = contractAddress;
-    //   $scope.Web3 = require('web3');
-    //   $scope.web3 = new Web3();
-    //   $scope.web3.setProvider(new web3.providers.HttpProvider($scope.httpAddress));
-      $scope.httpAddress=http;
-  })
->>>>>>> 14c43cff1f6bfaeabe5b4333b5ee1ac93e86860c
+
